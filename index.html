@@ -11,8 +11,6 @@ body {
   background:#0D0D0D; display:flex; justify-content:center; align-items:center;
   min-height:100vh; font-family:'Apple SD Gothic Neo','Noto Sans KR',-apple-system,sans-serif;
 }
-
-/* ── PHONE ── */
 .phone {
   position:relative; width:390px; height:844px; background:var(--black);
   border-radius:54px; overflow:hidden;
@@ -23,15 +21,11 @@ body {
   position:absolute; top:12px; left:50%; transform:translateX(-50%);
   width:126px; height:36px; background:#000; border-radius:20px; z-index:300;
 }
-
-/* ── SCROLL ── */
 .scroll-wrap {
   position:absolute; inset:0; overflow-y:scroll;
   scroll-snap-type:y mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none;
 }
 .scroll-wrap::-webkit-scrollbar { display:none; }
-
-/* ── SLIDE BASE ── */
 .clip-slide {
   width:100%; height:100%; scroll-snap-align:start;
   position:relative; overflow:hidden; background:#111; flex-shrink:0;
@@ -40,11 +34,11 @@ body {
   position:absolute; inset:0; background-size:cover;
   background-position:center; background-repeat:no-repeat;
 }
-
-/* Per-format overlays */
 .clip-slide[data-format="image"] .clip-bg::after,
 .clip-slide[data-format="quote"] .clip-bg::after,
-.clip-slide[data-format="stat"]  .clip-bg::after {
+.clip-slide[data-format="stat"]  .clip-bg::after,
+.clip-slide[data-format="memory"] .clip-bg::after,
+.clip-slide[data-format="unread"] .clip-bg::after {
   content:''; position:absolute; inset:0;
   background:linear-gradient(to bottom,rgba(0,0,0,.38) 0%,rgba(0,0,0,.02) 28%,rgba(0,0,0,.02) 50%,rgba(0,0,0,.55) 68%,rgba(0,0,0,.91) 100%);
 }
@@ -53,23 +47,22 @@ body {
   content:''; position:absolute; inset:0;
   background:linear-gradient(to bottom,rgba(0,0,0,.12),rgba(0,0,0,.48));
 }
-.clip-slide[data-format="banner"] .clip-bg::after {
+.clip-slide[data-format="banner"] .clip-bg::after,
+.clip-slide[data-format="comment"] .clip-bg::after {
   content:''; position:absolute; inset:0;
-  background:linear-gradient(to bottom,rgba(0,0,0,.0) 0%,rgba(0,0,0,.0) 55%,rgba(0,0,0,.82) 100%);
+  background:linear-gradient(to bottom,rgba(0,0,0,.0) 0%,rgba(0,0,0,.0) 40%,rgba(0,0,0,.82) 100%);
 }
 .clip-icon {
   position:absolute; inset:0; display:flex; align-items:center;
   justify-content:center; font-size:52px; z-index:1; pointer-events:none;
 }
-
-/* ── SHARED BOTTOM / ACTIONS ── */
 .s-actions {
   position:absolute; right:14px; bottom:200px; z-index:10;
   display:flex; flex-direction:column; align-items:center; gap:18px;
 }
-.clip-slide[data-format="card"]   .s-actions { bottom:auto; top:120px; }
-.clip-slide[data-format="banner"] .s-actions { bottom:auto; top:160px; }
-
+.clip-slide[data-format="card"]    .s-actions { bottom:auto; top:120px; }
+.clip-slide[data-format="banner"]  .s-actions { bottom:auto; top:160px; }
+.clip-slide[data-format="comment"] .s-actions { bottom:auto; top:160px; }
 .action-item {
   display:flex; flex-direction:column; align-items:center;
   gap:4px; cursor:pointer; user-select:none;
@@ -82,7 +75,6 @@ body {
 }
 .action-circle:active { transform:scale(.88); }
 .action-label { font-size:10.5px; color:rgba(255,255,255,.6); font-weight:500; }
-
 .badge {
   display:inline-flex; align-items:center; padding:2px 9px; border-radius:20px;
   font-size:10.5px; font-weight:700; letter-spacing:.07em;
@@ -90,7 +82,6 @@ body {
 .badge-B,.badge-L { background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.17); }
 .badge-K,.badge-N { background:rgba(200,169,110,.14); color:var(--gold); border:1px solid rgba(200,169,110,.26); }
 .badge-C { background:rgba(130,180,255,.1); color:#a8c8ff; border:1px solid rgba(130,180,255,.22); }
-
 .read-btn {
   flex:1; height:44px; background:#fff; border-radius:11px; border:none;
   cursor:pointer; font-size:13.5px; font-weight:700; color:#0A0A0A;
@@ -109,9 +100,7 @@ body {
 .clip-author { font-size:11.5px; color:rgba(255,255,255,.48); }
 
 /* ── FORMAT 1: IMAGE ── */
-.s-bottom-image {
-  position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px;
-}
+.s-bottom-image { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px; }
 .clip-title { font-size:18px; font-weight:700; color:#fff; line-height:1.42; letter-spacing:-.025em; margin-bottom:10px; }
 .clip-insight {
   border-left:2px solid var(--gold); padding:8px 12px; margin-bottom:14px;
@@ -138,7 +127,7 @@ body {
 }
 .card-title { font-size:22px; font-weight:800; color:#fff; line-height:1.32; letter-spacing:-.03em; margin:8px 0 10px; flex:1; }
 .card-sub { font-size:13px; color:rgba(255,255,255,.5); line-height:1.6; letter-spacing:-.01em; margin-bottom:14px; }
-.card-cta { padding:0 0 36px; padding-right:0; }
+.card-cta { padding:0 0 36px; }
 
 /* ── FORMAT 4: STAT ── */
 .stat-center {
@@ -175,6 +164,70 @@ body {
 }
 .banner-cta:active { opacity:.85; }
 
+/* ── FORMAT 6: MEMORY (1년 전 오늘) ── */
+.memory-top-badge {
+  position:absolute; top:68px; left:18px; z-index:10;
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:11px; font-weight:700; letter-spacing:.04em; color:#fff;
+  background:rgba(200,169,110,.85); padding:5px 13px; border-radius:20px;
+}
+.memory-date-sub {
+  position:absolute; top:108px; left:20px; z-index:10;
+  font-size:11px; color:rgba(255,255,255,.45); font-weight:500; letter-spacing:.01em;
+}
+.s-bottom-memory { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px; }
+.memory-title { font-size:18px; font-weight:700; color:#fff; line-height:1.42; letter-spacing:-.025em; margin-bottom:10px; }
+.memory-btn {
+  width:100%; height:44px; background:rgba(200,169,110,.15); border-radius:11px;
+  border:1px solid rgba(200,169,110,.38); cursor:pointer; font-size:13.5px; font-weight:700;
+  color:var(--gold); font-family:inherit; display:flex; align-items:center; justify-content:center;
+  gap:5px; letter-spacing:-.01em; transition:opacity .15s;
+}
+.memory-btn:active { opacity:.8; }
+
+/* ── FORMAT 7: COMMENT (추천 댓글) ── */
+.comment-center {
+  position:absolute; top:50%; left:0; right:0; transform:translateY(-60%);
+  padding:0 28px; text-align:center; z-index:10;
+}
+.comment-qmark { font-size:72px; line-height:.7; color:rgba(200,169,110,.55); font-family:Georgia,serif; margin-bottom:14px; display:block; }
+.comment-text { font-size:17px; font-weight:400; color:#fff; line-height:1.75; letter-spacing:-.02em; word-break:keep-all; margin-bottom:22px; }
+.comment-user-row { display:flex; align-items:center; justify-content:center; gap:10px; }
+.comment-avatar {
+  width:34px; height:34px; border-radius:50%;
+  background:rgba(200,169,110,.22); border:1.5px solid rgba(200,169,110,.38);
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:700; color:var(--gold); flex-shrink:0;
+}
+.comment-user-info { text-align:left; }
+.comment-username { font-size:12px; font-weight:600; color:rgba(255,255,255,.82); }
+.comment-likes-count { font-size:10.5px; color:rgba(255,255,255,.38); margin-top:2px; }
+.s-bottom-comment { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px; }
+.comment-from-lbl { font-size:9px; font-weight:700; color:var(--gold); letter-spacing:.12em; text-transform:uppercase; margin-bottom:5px; }
+.comment-note-ref { font-size:13px; font-weight:600; color:rgba(255,255,255,.65); line-height:1.4; letter-spacing:-.01em; margin-bottom:13px; }
+
+/* ── FORMAT 8: UNREAD (클릭 후 미읽음) ── */
+.unread-top-badge {
+  position:absolute; top:68px; left:18px; z-index:10;
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:11px; font-weight:700; letter-spacing:.04em; color:rgba(255,255,255,.85);
+  background:rgba(255,255,255,.1); backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.16); padding:5px 13px; border-radius:20px;
+}
+.s-bottom-unread { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px; }
+.unread-title { font-size:18px; font-weight:700; color:#fff; line-height:1.42; letter-spacing:-.025em; margin-bottom:12px; }
+.unread-prog-wrap { display:flex; align-items:center; gap:10px; margin-bottom:13px; }
+.unread-prog-bar { flex:1; height:4px; background:rgba(255,255,255,.14); border-radius:2px; overflow:hidden; }
+.unread-prog-fill { height:100%; background:var(--gold); border-radius:2px; }
+.unread-prog-label { font-size:10.5px; font-weight:700; color:var(--gold); white-space:nowrap; flex-shrink:0; }
+.continue-btn {
+  width:100%; height:44px; background:#fff; border-radius:11px; border:none;
+  cursor:pointer; font-size:13.5px; font-weight:700; color:#0A0A0A;
+  font-family:inherit; display:flex; align-items:center; justify-content:center;
+  gap:5px; letter-spacing:-.01em; transition:opacity .15s;
+}
+.continue-btn:active { opacity:.8; }
+
 /* ── FIXED TOP BAR ── */
 .fixed-top {
   position:absolute; top:0; left:0; right:0; z-index:100;
@@ -190,7 +243,6 @@ body {
 .prog-fill { height:100%; background:#fff; border-radius:2px; width:0; }
 .prog-seg.p-active .prog-fill { animation:fillProg 5s linear forwards; }
 @keyframes fillProg { to { width:100%; } }
-
 .top-nav { display:flex; align-items:center; justify-content:space-between; pointer-events:all; }
 .logo { font-size:15px; font-weight:700; letter-spacing:.13em; color:#fff; text-transform:uppercase; }
 .top-right { display:flex; align-items:center; gap:6px; }
@@ -237,8 +289,6 @@ body {
 .btn-close { width:28px; padding:0; border-radius:50%; justify-content:center; font-size:15px; }
 .drawer-body { overflow-y:auto; padding:14px 18px 36px; flex:1; scrollbar-width:none; }
 .drawer-body::-webkit-scrollbar { display:none; }
-
-/* FORM */
 .form-group { margin-bottom:13px; }
 .form-label { display:block; font-size:10px; font-weight:700; color:rgba(255,255,255,.32); letter-spacing:.1em; text-transform:uppercase; margin-bottom:7px; }
 .form-input {
@@ -249,9 +299,9 @@ body {
 .form-input::placeholder { color:rgba(255,255,255,.2); }
 .form-input:focus { border-color:rgba(200,169,110,.45); }
 textarea.form-input { min-height:58px; }
-
-/* FORMAT SELECTOR */
+.fmt-section-label { font-size:9px; font-weight:700; color:rgba(255,255,255,.22); letter-spacing:.12em; text-transform:uppercase; margin:10px 0 6px; }
 .fmt-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px; }
+.fmt-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-bottom:6px; }
 .fmt-opt {
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:5px; padding:10px 6px; border-radius:10px;
@@ -259,10 +309,9 @@ textarea.form-input { min-height:58px; }
   cursor:pointer; transition:all .15s; user-select:none;
 }
 .fmt-opt .fmt-icon { font-size:20px; }
-.fmt-opt .fmt-name { font-size:10.5px; font-weight:700; color:rgba(255,255,255,.38); letter-spacing:.02em; }
+.fmt-opt .fmt-name { font-size:10.5px; font-weight:700; color:rgba(255,255,255,.38); letter-spacing:.02em; text-align:center; line-height:1.3; }
 .fmt-opt.active { background:rgba(200,169,110,.13); border-color:rgba(200,169,110,.35); }
 .fmt-opt.active .fmt-name { color:var(--gold); }
-
 .fmt-banner {
   display:flex; align-items:center; justify-content:center; gap:10px;
   padding:11px; border-radius:10px; cursor:pointer; transition:all .15s; user-select:none;
@@ -270,8 +319,6 @@ textarea.form-input { min-height:58px; }
   font-size:12px; font-weight:700; color:rgba(200,169,110,.4); letter-spacing:.02em;
 }
 .fmt-banner.active { background:rgba(200,169,110,.13); border-color:rgba(200,169,110,.4); color:var(--gold); }
-
-/* IMAGE UPLOAD */
 .img-row { display:flex; gap:8px; align-items:center; }
 .upload-zone {
   flex-shrink:0; width:60px; height:60px; border-radius:8px;
@@ -284,8 +331,6 @@ textarea.form-input { min-height:58px; }
 .uz-ico { font-size:20px; }
 .uz-txt { font-size:8.5px; color:rgba(255,255,255,.28); letter-spacing:.04em; }
 .img-thumb { position:absolute; inset:0; background-size:cover; background-position:center; border-radius:7px; display:none; }
-
-/* COLOR SWATCHES */
 .color-swatches { display:flex; gap:7px; flex-wrap:wrap; }
 .swatch {
   width:32px; height:32px; border-radius:8px; cursor:pointer;
@@ -293,8 +338,6 @@ textarea.form-input { min-height:58px; }
 }
 .swatch.sel { border-color:var(--gold); }
 .swatch:active { transform:scale(.9); }
-
-/* BADGE SELECTOR */
 .badge-selector { display:flex; gap:5px; flex-wrap:wrap; }
 .badge-opt {
   padding:4px 11px; border-radius:20px; font-size:10.5px; font-weight:700;
@@ -305,11 +348,9 @@ textarea.form-input { min-height:58px; }
 .badge-opt.sel-B,.badge-opt.sel-L { background:rgba(255,255,255,.1); color:#fff; border-color:rgba(255,255,255,.18); }
 .badge-opt.sel-K,.badge-opt.sel-N { background:rgba(200,169,110,.13); color:var(--gold); border-color:rgba(200,169,110,.28); }
 .badge-opt.sel-C { background:rgba(130,180,255,.1); color:#a8c8ff; border-color:rgba(130,180,255,.22); }
-
 .row2 { display:flex; gap:8px; }
 .row2 .form-group { flex:1; }
 .divider { height:1px; background:rgba(255,255,255,.06); margin:12px 0; }
-
 .delete-btn {
   width:100%; height:38px; margin-top:6px; border-radius:8px;
   background:rgba(255,50,50,.07); border:1px solid rgba(255,50,50,.14);
@@ -325,26 +366,20 @@ textarea.form-input { min-height:58px; }
 /* ── 실제 모바일 기기: 전체화면 모드 ── */
 @media (max-width: 768px) {
   body { align-items:stretch; justify-content:stretch; min-height:100dvh; }
-  .phone {
-    width:100vw; height:100dvh;
-    border-radius:0; box-shadow:none;
-  }
+  .phone { width:100vw; height:100dvh; border-radius:0; box-shadow:none; }
   .dynamic-island { display:none; }
   .home-bar { display:none; }
   .fixed-top { padding-top:max(18px, env(safe-area-inset-top, 18px)); }
-  .s-bottom-image,
-  .s-bottom-quote,
-  .s-bottom-stat,
-  .s-bottom-banner {
+  .s-bottom-image,.s-bottom-quote,.s-bottom-stat,.s-bottom-banner,.s-bottom-memory,.s-bottom-comment,.s-bottom-unread {
     padding-bottom:max(28px, calc(env(safe-area-inset-bottom, 0px) + 20px));
   }
   .card-panel { padding-bottom:max(28px, calc(env(safe-area-inset-bottom, 0px) + 20px)); }
   .s-actions { bottom:22vh; }
-  .clip-slide[data-format="card"]   .s-actions { top:10vh; }
-  .clip-slide[data-format="banner"] .s-actions { top:14vh; }
+  .clip-slide[data-format="card"]    .s-actions { top:10vh; }
+  .clip-slide[data-format="banner"]  .s-actions { top:14vh; }
+  .clip-slide[data-format="comment"] .s-actions { top:14vh; }
 }
 </style>
-<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
@@ -352,10 +387,8 @@ textarea.form-input { min-height:58px; }
 <body>
 <div class="phone">
   <div class="dynamic-island"></div>
-
   <div class="scroll-wrap" id="scrollWrap"></div>
 
-  <!-- FIXED TOP BAR -->
   <div class="fixed-top">
     <div class="progress-bar" id="progressBar"></div>
     <div class="top-nav">
@@ -365,8 +398,7 @@ textarea.form-input { min-height:58px; }
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 1 2-2v-7"/>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-          </svg>
-          편집
+          </svg>편집
         </button>
         <div class="icon-btn">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -379,7 +411,6 @@ textarea.form-input { min-height:58px; }
 
   <div class="drawer-backdrop" id="drawerBackdrop" onclick="toggleDrawer()"></div>
 
-  <!-- EDIT DRAWER -->
   <div class="edit-drawer" id="editDrawer">
     <div class="drawer-handle"></div>
     <div class="drawer-header">
@@ -395,23 +426,33 @@ textarea.form-input { min-height:58px; }
     </div>
 
     <div class="drawer-body">
-      <!-- FORMAT SELECTOR -->
       <div class="form-group">
         <label class="form-label">클립 포맷</label>
+
+        <!-- 기본 포맷 -->
+        <div class="fmt-section-label">기본</div>
         <div class="fmt-grid" id="fmtGrid">
-          <div class="fmt-opt" data-fmt="image" onclick="pickFormat(this)"><span class="fmt-icon">🖼</span><span class="fmt-name">이미지형</span></div>
-          <div class="fmt-opt" data-fmt="quote" onclick="pickFormat(this)"><span class="fmt-icon">💬</span><span class="fmt-name">인용구형</span></div>
-          <div class="fmt-opt" data-fmt="card"  onclick="pickFormat(this)"><span class="fmt-icon">🃏</span><span class="fmt-name">카드형</span></div>
-          <div class="fmt-opt" data-fmt="stat"  onclick="pickFormat(this)"><span class="fmt-icon">📊</span><span class="fmt-name">숫자형</span></div>
+          <div class="fmt-opt" data-fmt="image"  onclick="pickFormat(this)"><span class="fmt-icon">🖼</span><span class="fmt-name">이미지형</span></div>
+          <div class="fmt-opt" data-fmt="quote"  onclick="pickFormat(this)"><span class="fmt-icon">💬</span><span class="fmt-name">인용구형</span></div>
+          <div class="fmt-opt" data-fmt="card"   onclick="pickFormat(this)"><span class="fmt-icon">🃏</span><span class="fmt-name">카드형</span></div>
+          <div class="fmt-opt" data-fmt="stat"   onclick="pickFormat(this)"><span class="fmt-icon">📊</span><span class="fmt-name">숫자형</span></div>
         </div>
         <div class="fmt-banner" data-fmt="banner" onclick="pickFormat(this)" id="fmtBanner">
           <span style="font-size:18px">📣</span> 배너형 &nbsp;·&nbsp; 이벤트 · 광고
+        </div>
+
+        <!-- 개인화 포맷 -->
+        <div class="fmt-section-label" style="margin-top:12px">개인화</div>
+        <div class="fmt-grid-3" id="fmtPersonal">
+          <div class="fmt-opt" data-fmt="memory"  onclick="pickFormat(this)"><span class="fmt-icon">📅</span><span class="fmt-name">1년 전 오늘</span></div>
+          <div class="fmt-opt" data-fmt="comment" onclick="pickFormat(this)"><span class="fmt-icon">💭</span><span class="fmt-name">추천 댓글</span></div>
+          <div class="fmt-opt" data-fmt="unread"  onclick="pickFormat(this)"><span class="fmt-icon">📖</span><span class="fmt-name">미읽음</span></div>
         </div>
       </div>
 
       <div class="divider"></div>
 
-      <!-- BG IMAGE (image / card / banner) -->
+      <!-- BG IMAGE -->
       <div class="form-group" id="fg-bgimage">
         <label class="form-label" id="bgImageLbl">배경 이미지</label>
         <div class="img-row">
@@ -424,7 +465,7 @@ textarea.form-input { min-height:58px; }
         </div>
       </div>
 
-      <!-- BG COLOR (quote / stat) -->
+      <!-- BG COLOR -->
       <div class="form-group" id="fg-bgcolor" style="display:none">
         <label class="form-label">배경 색상</label>
         <div class="color-swatches" id="colorSwatches">
@@ -439,7 +480,7 @@ textarea.form-input { min-height:58px; }
         </div>
       </div>
 
-      <!-- BADGE (not for banner) -->
+      <!-- BADGE -->
       <div class="form-group" id="fg-badge">
         <label class="form-label">카테고리</label>
         <div class="badge-selector" id="badgeSel">
@@ -451,7 +492,7 @@ textarea.form-input { min-height:58px; }
         </div>
       </div>
 
-      <!-- AUTHOR (not for banner) -->
+      <!-- AUTHOR -->
       <div class="form-group" id="fg-author">
         <label class="form-label">저자</label>
         <input class="form-input" type="text" id="authorInput" placeholder="저자명" oninput="liveText('author',this.value)">
@@ -476,7 +517,7 @@ textarea.form-input { min-height:58px; }
         </select>
       </div>
 
-      <!-- INSIGHT (image / stat) -->
+      <!-- INSIGHT -->
       <div class="form-group" id="fg-insight">
         <label class="form-label" id="insightLbl">핵심 인사이트</label>
         <textarea class="form-input" id="insightInput" rows="3" placeholder="클립의 핵심 문장" oninput="liveText('insight',this.value)"></textarea>
@@ -512,6 +553,34 @@ textarea.form-input { min-height:58px; }
         </div>
       </div>
 
+      <!-- ▼ 개인화 포맷 전용 필드 ▼ -->
+
+      <!-- MEMORY DATE -->
+      <div class="form-group" id="fg-memoryDate" style="display:none">
+        <label class="form-label">날짜 표시 (1년 전)</label>
+        <input class="form-input" type="text" id="memoryDateInput" placeholder="2024년 7월 25일" oninput="liveText('memoryDate',this.value)">
+      </div>
+
+      <!-- COMMENT -->
+      <div class="form-group" id="fg-comment" style="display:none">
+        <label class="form-label">댓글 내용</label>
+        <textarea class="form-input" id="commentInput" rows="4" placeholder="독자가 남긴 인기 댓글" oninput="liveText('comment',this.value)"></textarea>
+      </div>
+      <div class="form-group" id="fg-commenter" style="display:none">
+        <label class="form-label">댓글 작성자</label>
+        <input class="form-input" type="text" id="commenterInput" placeholder="닉네임" oninput="liveText('commenter',this.value)">
+      </div>
+      <div class="form-group" id="fg-commentLikes" style="display:none">
+        <label class="form-label">공감 수</label>
+        <input class="form-input" type="number" id="commentLikesInput" placeholder="128" oninput="liveText('commentLikes',this.value)">
+      </div>
+
+      <!-- UNREAD PROGRESS -->
+      <div class="form-group" id="fg-readProgress" style="display:none">
+        <label class="form-label">읽은 비율 (%)</label>
+        <input class="form-input" type="number" id="readProgressInput" min="1" max="99" placeholder="23" oninput="liveProgress(this.value)">
+      </div>
+
       <!-- RATING + URL -->
       <div class="row2">
         <div class="form-group" id="fg-rating">
@@ -535,12 +604,9 @@ textarea.form-input { min-height:58px; }
   </div>
 
   <div class="home-bar"></div>
-</div><!-- /phone -->
+</div>
 
 <script>
-// ════════════════════════════════════════════════════════
-// ① Firebase 설정
-// ════════════════════════════════════════════════════════
 const FIREBASE_CONFIG = {
   apiKey:            "AIzaSyCuEgBtdgtMoyucx7PIFxRbgifViEYaxnU",
   authDomain:        "longblack-reels.firebaseapp.com",
@@ -549,9 +615,7 @@ const FIREBASE_CONFIG = {
   messagingSenderId: "902496029585",
   appId:             "1:902496029585:web:72856587103cabf615a830"
 };
-// ② 관리자 비밀번호
 const ADMIN_PASSWORD = 'longblack2024';
-// ════════════════════════════════════════════════════════
 
 const isAdmin = new URLSearchParams(location.search).get('admin') === ADMIN_PASSWORD;
 
@@ -563,7 +627,6 @@ if (FB_OK) {
   fbStorage = firebase.storage();
 }
 
-// ─── DATA ───────────────────────────────────
 const GRADS = [
   'linear-gradient(145deg,#0e0b28,#2a2460,#1a1840)',
   'linear-gradient(145deg,#180800,#3c1800,#180800)',
@@ -573,12 +636,19 @@ const GRADS = [
 ];
 const ICONS = ['🤖','👟','🍺','🔗','⚡','📖','🎨','🏛','🌿','💡'];
 
+// 오늘 기준 작년 날짜 자동 생성
+function lastYearDateStr(){
+  const d = new Date(); d.setFullYear(d.getFullYear()-1);
+  return `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`;
+}
+
 const DEFAULT_CLIPS = [
   { format:'image', bg:'', grad:GRADS[0], icon:'🤖', titleSize:18,
     badge:'뉴스픽스', cls:'N', author:'고토 나오요시 · 모리카와 준',
     title:'앤트로픽을 최강의 AI 기업으로 만든 남자, 보리스 체르니 인터뷰',
     insight:'"챗GPT보다 2년 늦게 출발했지만, \'안전한 AI\'라는 단 하나의 포지셔닝으로 기업 시장을 장악했다."',
     quote:'', subtitle:'', stat:'', statUnit:'', statCtx:'',
+    memoryDate:'', comment:'', commenter:'', commentLikes:'', readProgress:'',
     rating:'4.5', likes:2143, liked:false, saved:false, url:'https://longblack.co/note/2062' },
 
   { format:'quote', bg:'', grad:GRADS[3], icon:'⚡', titleSize:18,
@@ -586,12 +656,38 @@ const DEFAULT_CLIPS = [
     title:'니체가 현대인에게',
     quote:'지금 이 순간을 영원히 반복해도 좋다고 말할 수 있을 때, 비로소 자기 삶의 주인이 된다.',
     insight:'', subtitle:'', stat:'', statUnit:'', statCtx:'',
+    memoryDate:'', comment:'', commenter:'', commentLikes:'', readProgress:'',
     rating:'4.7', likes:4120, liked:false, saved:false, url:'https://longblack.co/note/2055' },
+
+  { format:'memory', bg:'', grad:GRADS[4], icon:'📅', titleSize:18,
+    badge:'커리어', cls:'K', author:'롱블랙',
+    title:'아레나 : 알고리즘 없는 \'내향형 SNS\'는 어떻게 월 1억원씩 벌까',
+    insight:'"추천 피드도, 바이럴 기능도 없다. \'고요함\'이 상품이 됐다."',
+    memoryDate:'', quote:'', subtitle:'', stat:'', statUnit:'', statCtx:'',
+    comment:'', commenter:'', commentLikes:'', readProgress:'',
+    rating:'4.3', likes:1234, liked:false, saved:false, url:'https://longblack.co/note/2057' },
+
+  { format:'comment', bg:'', grad:'linear-gradient(145deg,#0e0b28,#1a1840,#0e0b28)', icon:'💭', titleSize:18,
+    badge:'브랜드', cls:'B', author:'롱블랙',
+    title:'무신사의 연쇄 히트 방정식',
+    comment:'이 노트 읽고 진짜 무신사 보는 눈이 바뀌었어요. 단순한 쇼핑몰이 아니라 취향 커뮤니티였구나.',
+    commenter:'coffee_and_books', commentLikes:'214',
+    insight:'', quote:'', subtitle:'', stat:'', statUnit:'', statCtx:'', memoryDate:'', readProgress:'',
+    rating:'4.6', likes:3412, liked:false, saved:false, url:'https://longblack.co/note/2045' },
+
+  { format:'unread', bg:'', grad:GRADS[1], icon:'📖', titleSize:18,
+    badge:'비즈니스', cls:'B', author:'롱블랙',
+    title:'블루문의 침투력 — 대기업이 만든 가짜 수제 맥주',
+    readProgress:'31',
+    insight:'73%의 시장 점유율, 그 뒤에 숨겨진 이야기를 아직 다 읽지 않으셨어요.',
+    quote:'', subtitle:'', stat:'', statUnit:'', statCtx:'', memoryDate:'', comment:'', commenter:'', commentLikes:'',
+    rating:'4.4', likes:1823, liked:false, saved:false, url:'https://longblack.co/note/2059' },
 
   { format:'banner', bg:'', grad:'linear-gradient(145deg,#0a0a0a,#1a1a1a)',
     icon:'📣', badge:'', cls:'N', titleSize:22,
     title:'롱블랙 리딩 크루 모집', author:'',
     insight:'', quote:'', subtitle:'', stat:'', statUnit:'', statCtx:'',
+    memoryDate:'', comment:'', commenter:'', commentLikes:'', readProgress:'',
     rating:'', likes:0, liked:false, saved:false, url:'https://longblack.co/readingcrew/season1' },
 
   { format:'card', bg:'', grad:GRADS[1], icon:'👟', titleSize:22,
@@ -599,6 +695,7 @@ const DEFAULT_CLIPS = [
     title:'무신사의 연쇄 히트 방정식',
     subtitle:'동대문에서 태어나 시부야까지. 취향을 가진 사람들의 커뮤니티가 일본 시장을 열었다.',
     insight:'', quote:'', stat:'', statUnit:'', statCtx:'',
+    memoryDate:'', comment:'', commenter:'', commentLikes:'', readProgress:'',
     rating:'4.6', likes:3412, liked:false, saved:false, url:'https://longblack.co/note/2045' },
 
   { format:'stat', bg:'', grad:GRADS[2], icon:'📊', titleSize:18,
@@ -607,32 +704,18 @@ const DEFAULT_CLIPS = [
     stat:'73', statUnit:'%', statCtx:'미국 크래프트 맥주 시장 점유율',
     insight:'대기업이 만든 가짜 수제 맥주가 어떻게 시장을 평정했나.',
     quote:'', subtitle:'',
+    memoryDate:'', comment:'', commenter:'', commentLikes:'', readProgress:'',
     rating:'4.4', likes:1823, liked:false, saved:false, url:'https://longblack.co/note/2059' },
-
-  { format:'image', bg:'', grad:GRADS[4], icon:'🔗', titleSize:18,
-    badge:'커리어', cls:'K', author:'롱블랙',
-    title:'아레나 : 알고리즘 없는 \'내향형 SNS\'는 어떻게 월 1억원씩 벌까',
-    insight:'"추천 피드도, 바이럴 기능도 없다. \'고요함\'이 상품이 됐다."',
-    quote:'', subtitle:'', stat:'', statUnit:'', statCtx:'',
-    rating:'4.3', likes:1234, liked:false, saved:false, url:'https://longblack.co/note/2057' },
 ];
 let clips = JSON.parse(JSON.stringify(DEFAULT_CLIPS));
 
-// ─── STATE ──────────────────────────────────
-let curClipIdx = 0;
-let totalDom = 0;
-let drawerOpen = false;
+let curClipIdx = 0, totalDom = 0, drawerOpen = false;
 let mainObs = null, appendObs = null;
-let _isSaving = false;
-let _saveTimer = null;
+let _isSaving = false, _saveTimer = null;
 
-// ─── CLOUD SAVE / SYNC ───────────────────────
 async function doSave(){
   if (!isAdmin) return;
-  const payload = clips.map(c => ({
-    ...c,
-    bg: (c.bg && c.bg.startsWith('data:')) ? '' : (c.bg || '')
-  }));
+  const payload = clips.map(c => ({...c, bg:(c.bg&&c.bg.startsWith('data:'))?'':(c.bg||'')}));
   if (db) {
     try {
       _isSaving = true;
@@ -640,7 +723,7 @@ async function doSave(){
         data: JSON.stringify(payload),
         ts: firebase.firestore.FieldValue.serverTimestamp()
       });
-    } catch(e) { _isSaving = false; console.error('Cloud save error:', e); }
+    } catch(e) { _isSaving = false; console.error(e); }
   } else {
     try { localStorage.setItem('lb_clips', JSON.stringify(clips)); } catch(e){}
   }
@@ -654,22 +737,16 @@ function startSync(){
       if (_isSaving) { _isSaving = false; return; }
       const wrap = document.getElementById('scrollWrap');
       const prevScroll = wrap.scrollTop;
-      if (!snap.exists) {
-        renderAll(); setupMainObs();
-        if (isAdmin) doSave();
-        return;
-      }
-      try { clips = JSON.parse(snap.data().data); }
-      catch(e) { return; }
+      if (!snap.exists) { renderAll(); setupMainObs(); if(isAdmin) doSave(); return; }
+      try { clips = JSON.parse(snap.data().data); } catch(e) { return; }
       renderAll(); setupMainObs();
       requestAnimationFrame(() => { wrap.scrollTop = prevScroll; });
     }, err => {
-      console.error('Sync error:', err);
-      try { const s = localStorage.getItem('lb_clips'); if(s) clips = JSON.parse(s); } catch(e){}
+      try { const s=localStorage.getItem('lb_clips'); if(s) clips=JSON.parse(s); } catch(e){}
       renderAll(); setupMainObs();
     });
   } else {
-    try { const s = localStorage.getItem('lb_clips'); if(s) clips = JSON.parse(s); } catch(e){}
+    try { const s=localStorage.getItem('lb_clips'); if(s) clips=JSON.parse(s); } catch(e){}
     renderAll(); setupMainObs();
   }
 }
@@ -683,40 +760,29 @@ function resetData(){
   location.reload();
 }
 
-// ─── UTILS ──────────────────────────────────
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function fmtN(n){ return n>=1000?(n/1000).toFixed(1).replace('.0','')+'k':String(n||0); }
-
 const ARROW_SVG = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
 
-// ─── ACTIONS HTML ────────────────────────────
 function actionsHTML(c, clipIdx) {
-  const lf = c.liked?'#FF4444':'none', ls = c.liked?'#FF4444':'white';
-  const sf = c.saved?'#C8A96E':'none', ss = c.saved?'#C8A96E':'white';
-  return `
-  <div class="s-actions">
+  const lf=c.liked?'#FF4444':'none', ls=c.liked?'#FF4444':'white';
+  const sf=c.saved?'#C8A96E':'none', ss=c.saved?'#C8A96E':'white';
+  return `<div class="s-actions">
     <div class="action-item" onclick="toggleLike(${clipIdx})">
       <div class="action-circle like-circle" style="${c.liked?'background:rgba(200,50,50,.28)':''}">
-        <svg class="like-icon" width="18" height="18" viewBox="0 0 24 24" fill="${lf}" stroke="${ls}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
+        <svg class="like-icon" width="18" height="18" viewBox="0 0 24 24" fill="${lf}" stroke="${ls}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
       </div>
       <span class="action-label like-count">${fmtN(c.likes)}</span>
     </div>
     <div class="action-item" onclick="toggleSave(${clipIdx})">
       <div class="action-circle save-circle" style="${c.saved?'background:rgba(200,169,110,.2)':''}">
-        <svg class="save-icon" width="18" height="18" viewBox="0 0 24 24" fill="${sf}" stroke="${ss}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-        </svg>
+        <svg class="save-icon" width="18" height="18" viewBox="0 0 24 24" fill="${sf}" stroke="${ss}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
       </div>
       <span class="action-label">저장</span>
     </div>
     <div class="action-item">
       <div class="action-circle">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-        </svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
       </div>
       <span class="action-label">공유</span>
     </div>
@@ -724,15 +790,16 @@ function actionsHTML(c, clipIdx) {
 }
 
 function ctaHTML(c, clipIdx, withRating=true) {
-  const rat = withRating && c.rating ? `<div class="rating-chip"><span class="star">★</span><span class="live-rating">${esc(c.rating)}</span></div>` : '';
+  const rat = withRating&&c.rating ? `<div class="rating-chip"><span class="star">★</span><span class="live-rating">${esc(c.rating)}</span></div>` : '';
   return `<div class="bottom-cta"><button class="read-btn" onclick="openNote(${clipIdx})">노트 전체 읽기 ${ARROW_SVG}</button>${rat}</div>`;
 }
 
-// ─── SLIDE TEMPLATES ────────────────────────
 function bgStyle(c){ return c.bg?`background-image:url('${c.bg}')`:`background:${c.grad}`; }
 
+// ── 슬라이드 템플릿 ──────────────────────────────────────
+
 function slideImage(c, clipIdx){
-  const fs = c.titleSize||18;
+  const fs=c.titleSize||18;
   return `
   <div class="clip-bg" style="${bgStyle(c)}"></div>
   ${!c.bg?`<div class="clip-icon" style="opacity:.38">${c.icon}</div>`:''}
@@ -743,9 +810,7 @@ function slideImage(c, clipIdx){
       ${c.author?`<span class="clip-author live-author">${esc(c.author)}</span>`:'<span class="clip-author live-author" style="display:none"></span>'}
     </div>
     <div class="clip-title live-title" style="font-size:${fs}px">${esc(c.title)}</div>
-    ${c.insight
-      ? `<div class="clip-insight"><div class="insight-label">핵심 인사이트</div><div class="insight-text live-insight">${esc(c.insight)}</div></div>`
-      : `<div class="clip-insight" style="display:none"><div class="insight-label">핵심 인사이트</div><div class="insight-text live-insight"></div></div>`}
+    ${c.insight?`<div class="clip-insight"><div class="insight-label">핵심 인사이트</div><div class="insight-text live-insight">${esc(c.insight)}</div></div>`:`<div class="clip-insight" style="display:none"><div class="insight-label">핵심 인사이트</div><div class="insight-text live-insight"></div></div>`}
     ${ctaHTML(c,clipIdx)}
   </div>`;
 }
@@ -766,7 +831,7 @@ function slideQuote(c, clipIdx){
 }
 
 function slideCard(c, clipIdx){
-  const fs = c.titleSize||22;
+  const fs=c.titleSize||22;
   return `
   <div class="clip-bg" style="${bgStyle(c)}"></div>
   ${!c.bg?`<div class="clip-icon" style="opacity:.28;top:8%">${c.icon}</div>`:''}
@@ -784,13 +849,8 @@ function slideStat(c, clipIdx){
   <div class="clip-bg" style="${bgStyle(c)}"></div>
   <div class="stat-center">
     <div class="stat-ctx live-statCtx">${esc(c.statCtx||c.badge)}</div>
-    <div class="stat-row">
-      <span class="stat-number live-stat">${esc(c.stat)}</span>
-      <span class="stat-unit live-statUnit">${esc(c.statUnit)}</span>
-    </div>
-    ${c.insight
-      ? `<div class="stat-desc live-insight">${esc(c.insight)}</div>`
-      : `<div class="stat-desc live-insight" style="display:none"></div>`}
+    <div class="stat-row"><span class="stat-number live-stat">${esc(c.stat)}</span><span class="stat-unit live-statUnit">${esc(c.statUnit)}</span></div>
+    ${c.insight?`<div class="stat-desc live-insight">${esc(c.insight)}</div>`:`<div class="stat-desc live-insight" style="display:none"></div>`}
   </div>
   ${actionsHTML(c,clipIdx)}
   <div class="s-bottom-stat">
@@ -803,11 +863,10 @@ function slideStat(c, clipIdx){
 }
 
 function slideBanner(c, clipIdx){
-  const fs = c.titleSize||22;
-  const hasImg = !!c.bg;
+  const fs=c.titleSize||22;
   return `
   <div class="clip-bg" style="${bgStyle(c)}"></div>
-  ${!hasImg?`<div class="banner-placeholder"><div class="banner-ph-icon">📣</div><div class="banner-ph-text">이벤트 이미지를 업로드하세요</div></div>`:''}
+  ${!c.bg?`<div class="banner-placeholder"><div class="banner-ph-icon">📣</div><div class="banner-ph-text">이벤트 이미지를 업로드하세요</div></div>`:''}
   <div class="banner-tag">EVENT</div>
   ${actionsHTML(c,clipIdx)}
   <div class="s-bottom-banner">
@@ -816,104 +875,149 @@ function slideBanner(c, clipIdx){
   </div>`;
 }
 
+// ── [NEW] FORMAT 6: 1년 전 오늘 ──────────────────────────
+function slideMemory(c, clipIdx){
+  const fs = c.titleSize||18;
+  const dateStr = c.memoryDate || lastYearDateStr();
+  return `
+  <div class="clip-bg" style="${bgStyle(c)}"></div>
+  ${!c.bg?`<div class="clip-icon" style="opacity:.32">${c.icon}</div>`:''}
+  <div class="memory-top-badge">📅 1년 전 오늘</div>
+  <div class="memory-date-sub">${esc(dateStr)}</div>
+  ${actionsHTML(c,clipIdx)}
+  <div class="s-bottom-memory">
+    <div class="clip-meta">
+      <span class="badge s-badge badge-${c.cls}">${esc(c.badge)}</span>
+      ${c.author?`<span class="clip-author live-author">${esc(c.author)}</span>`:'<span class="clip-author live-author" style="display:none"></span>'}
+    </div>
+    <div class="memory-title live-title" style="font-size:${fs}px">${esc(c.title)}</div>
+    ${c.insight?`<div class="clip-insight"><div class="insight-label">기억나시나요?</div><div class="insight-text live-insight">${esc(c.insight)}</div></div>`:`<div class="clip-insight" style="display:none"><div class="insight-label">기억나시나요?</div><div class="insight-text live-insight"></div></div>`}
+    <button class="memory-btn" onclick="openNote(${clipIdx})">다시 읽기 ${ARROW_SVG}</button>
+  </div>`;
+}
+
+// ── [NEW] FORMAT 7: 추천 댓글 ────────────────────────────
+function slideComment(c, clipIdx){
+  const initial = (c.commenter||'익').charAt(0);
+  return `
+  <div class="clip-bg" style="${bgStyle(c)}"></div>
+  ${!c.bg?`<div class="clip-icon" style="opacity:.18">${c.icon}</div>`:''}
+  <div class="comment-center">
+    <span class="comment-qmark">"</span>
+    <div class="comment-text live-comment">${esc(c.comment||'댓글을 입력하세요')}</div>
+    <div class="comment-user-row">
+      <div class="comment-avatar">${esc(initial)}</div>
+      <div class="comment-user-info">
+        <div class="comment-username live-commenter">${esc(c.commenter||'익명 독자')}</div>
+        ${c.commentLikes?`<div class="comment-likes-count live-commentLikes">❤️ ${esc(c.commentLikes)}명이 공감</div>`:'<div class="comment-likes-count live-commentLikes" style="display:none"></div>'}
+      </div>
+    </div>
+  </div>
+  ${actionsHTML(c,clipIdx)}
+  <div class="s-bottom-comment">
+    <div class="comment-from-lbl">이 댓글이 달린 노트</div>
+    <div class="comment-note-ref live-title">${esc(c.title)}</div>
+    <div class="bottom-cta"><button class="read-btn" onclick="openNote(${clipIdx})">노트 전체 읽기 ${ARROW_SVG}</button></div>
+  </div>`;
+}
+
+// ── [NEW] FORMAT 8: 클릭 후 미읽음 ──────────────────────
+function slideUnread(c, clipIdx){
+  const fs = c.titleSize||18;
+  const prog = parseInt(c.readProgress)||23;
+  return `
+  <div class="clip-bg" style="${bgStyle(c)}"></div>
+  ${!c.bg?`<div class="clip-icon" style="opacity:.28">${c.icon}</div>`:''}
+  <div class="unread-top-badge">📖 읽다가 멈춘 노트</div>
+  ${actionsHTML(c,clipIdx)}
+  <div class="s-bottom-unread">
+    <div class="clip-meta">
+      <span class="badge s-badge badge-${c.cls}">${esc(c.badge)}</span>
+      ${c.author?`<span class="clip-author live-author">${esc(c.author)}</span>`:'<span class="clip-author live-author" style="display:none"></span>'}
+    </div>
+    <div class="unread-title live-title" style="font-size:${fs}px">${esc(c.title)}</div>
+    <div class="unread-prog-wrap">
+      <div class="unread-prog-bar"><div class="unread-prog-fill" style="width:${prog}%"></div></div>
+      <span class="unread-prog-label live-readProgress-label">${prog}% 읽음</span>
+    </div>
+    ${c.insight?`<div class="clip-insight" style="margin-bottom:14px"><div class="insight-label">마저 읽어야 할 이유</div><div class="insight-text live-insight">${esc(c.insight)}</div></div>`:`<div class="clip-insight" style="display:none;margin-bottom:14px"><div class="insight-label">마저 읽어야 할 이유</div><div class="insight-text live-insight"></div></div>`}
+    <button class="continue-btn" onclick="openNote(${clipIdx})">이어서 읽기 ${ARROW_SVG}</button>
+  </div>`;
+}
+
 function getSlideInner(c, clipIdx){
   switch(c.format){
-    case 'quote':  return slideQuote(c,clipIdx);
-    case 'card':   return slideCard(c,clipIdx);
-    case 'stat':   return slideStat(c,clipIdx);
-    case 'banner': return slideBanner(c,clipIdx);
-    default:       return slideImage(c,clipIdx);
+    case 'quote':   return slideQuote(c,clipIdx);
+    case 'card':    return slideCard(c,clipIdx);
+    case 'stat':    return slideStat(c,clipIdx);
+    case 'banner':  return slideBanner(c,clipIdx);
+    case 'memory':  return slideMemory(c,clipIdx);
+    case 'comment': return slideComment(c,clipIdx);
+    case 'unread':  return slideUnread(c,clipIdx);
+    default:        return slideImage(c,clipIdx);
   }
 }
 
-// ─── RENDER ─────────────────────────────────
 function renderAll(){
-  const wrap = document.getElementById('scrollWrap');
-  wrap.innerHTML = '';
-  totalDom = 0;
-  buildProgress();
-  appendRound();
+  const wrap=document.getElementById('scrollWrap');
+  wrap.innerHTML=''; totalDom=0; buildProgress(); appendRound();
 }
-
 function appendRound(){
-  const wrap = document.getElementById('scrollWrap');
-  const start = totalDom;
-  clips.forEach((c, clipIdx) => {
-    const div = document.createElement('div');
-    div.className = 'clip-slide';
-    div.dataset.i    = start + clipIdx;
-    div.dataset.clip = clipIdx;
-    div.dataset.format = c.format;
-    div.innerHTML = getSlideInner(c, clipIdx);
+  const wrap=document.getElementById('scrollWrap');
+  const start=totalDom;
+  clips.forEach((c,clipIdx)=>{
+    const div=document.createElement('div');
+    div.className='clip-slide'; div.dataset.i=start+clipIdx;
+    div.dataset.clip=clipIdx; div.dataset.format=c.format;
+    div.innerHTML=getSlideInner(c,clipIdx);
     wrap.appendChild(div);
     if(mainObs) mainObs.observe(div);
   });
-  totalDom = start + clips.length;
+  totalDom=start+clips.length;
   setupAppendTrigger();
 }
-
 function rerenderClip(clipIdx){
-  document.querySelectorAll(`.clip-slide[data-clip="${clipIdx}"]`).forEach(slide => {
-    const c = clips[clipIdx];
-    slide.dataset.format = c.format;
-    slide.innerHTML = getSlideInner(c, clipIdx);
+  document.querySelectorAll(`.clip-slide[data-clip="${clipIdx}"]`).forEach(slide=>{
+    const c=clips[clipIdx];
+    slide.dataset.format=c.format;
+    slide.innerHTML=getSlideInner(c,clipIdx);
     if(mainObs) mainObs.observe(slide);
   });
 }
-
-// ─── PROGRESS BAR ───────────────────────────
 function buildProgress(){
-  const pb = document.getElementById('progressBar');
-  pb.innerHTML = clips.map((_,i)=>
-    `<div class="prog-seg${i===curClipIdx?' p-active':''}"><div class="prog-fill"></div></div>`
-  ).join('');
+  const pb=document.getElementById('progressBar');
+  pb.innerHTML=clips.map((_,i)=>`<div class="prog-seg${i===curClipIdx?' p-active':''}"><div class="prog-fill"></div></div>`).join('');
 }
-
 function refreshProgress(){
   document.querySelectorAll('.prog-seg').forEach((seg,i)=>{
-    seg.className = 'prog-seg';
-    void seg.offsetWidth;
-    seg.className = 'prog-seg' + (i===curClipIdx?' p-active':'');
+    seg.className='prog-seg'; void seg.offsetWidth;
+    seg.className='prog-seg'+(i===curClipIdx?' p-active':'');
   });
 }
-
-// ─── OBSERVERS ──────────────────────────────
 function setupMainObs(){
   if(mainObs) mainObs.disconnect();
-  mainObs = new IntersectionObserver(entries=>{
+  mainObs=new IntersectionObserver(entries=>{
     entries.forEach(e=>{
-      if(e.intersectionRatio >= 0.55){
-        const ci = parseInt(e.target.dataset.clip);
-        if(ci !== curClipIdx){
-          curClipIdx = ci;
-          refreshProgress();
-          if(drawerOpen) fillDrawer();
-        }
+      if(e.intersectionRatio>=0.55){
+        const ci=parseInt(e.target.dataset.clip);
+        if(ci!==curClipIdx){ curClipIdx=ci; refreshProgress(); if(drawerOpen) fillDrawer(); }
       }
     });
   },{threshold:0.55});
   document.querySelectorAll('.clip-slide').forEach(s=>mainObs.observe(s));
 }
-
 function setupAppendTrigger(){
   if(appendObs) appendObs.disconnect();
-  const trigIdx = totalDom - 2;
-  const trig = document.querySelector(`.clip-slide[data-i="${trigIdx}"]`);
+  const trig=document.querySelector(`.clip-slide[data-i="${totalDom-2}"]`);
   if(!trig) return;
-  appendObs = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        appendObs.disconnect();
-        appendRound();
-      }
-    });
+  appendObs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ appendObs.disconnect(); appendRound(); }});
   },{threshold:0.4});
   appendObs.observe(trig);
 }
 
-// ─── DRAWER ─────────────────────────────────
 function toggleDrawer(){
-  drawerOpen = !drawerOpen;
+  drawerOpen=!drawerOpen;
   document.getElementById('editDrawer').classList.toggle('open',drawerOpen);
   document.getElementById('drawerBackdrop').classList.toggle('open',drawerOpen);
   document.getElementById('editBtn').classList.toggle('active',drawerOpen);
@@ -921,154 +1025,141 @@ function toggleDrawer(){
 }
 
 function fillDrawer(){
-  const c = clips[curClipIdx]||{};
-  const fmt = c.format||'image';
-
+  const c=clips[curClipIdx]||{};
+  const fmt=c.format||'image';
+  // 포맷 버튼 활성화
   document.querySelectorAll('.fmt-opt').forEach(o=>o.classList.toggle('active',o.dataset.fmt===fmt));
   document.getElementById('fmtBanner').classList.toggle('active',fmt==='banner');
   updateDrawerFields(fmt);
-
-  const thumb = document.getElementById('imgThumb');
+  // 이미지 썸네일
+  const thumb=document.getElementById('imgThumb');
   if(c.bg){ thumb.style.backgroundImage=`url('${c.bg}')`; thumb.style.display='block'; document.getElementById('imgUrlInput').value=c.bg.startsWith('data:')?'':c.bg; }
   else { thumb.style.backgroundImage=''; thumb.style.display='none'; document.getElementById('imgUrlInput').value=''; }
-
+  // 스와치
   document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('sel',s.dataset.g===c.grad&&!c.bg));
+  // 배지
   document.querySelectorAll('.badge-opt').forEach(o=>o.className='badge-opt'+(o.dataset.cls===c.cls?' sel-'+c.cls:''));
-
-  setVal('authorInput',  c.author);
-  setVal('titleInput',   c.title);
-  setVal('insightInput', c.insight);
-  setVal('quoteInput',   c.quote);
-  setVal('subtitleInput',c.subtitle);
-  setVal('statInput',    c.stat);
-  setVal('statUnitInput',c.statUnit);
-  setVal('statCtxInput', c.statCtx);
-  setVal('ratingInput',  c.rating);
-  setVal('noteUrlInput', c.url);
-
+  // 텍스트 필드
+  setVal('authorInput',c.author); setVal('titleInput',c.title); setVal('insightInput',c.insight);
+  setVal('quoteInput',c.quote); setVal('subtitleInput',c.subtitle);
+  setVal('statInput',c.stat); setVal('statUnitInput',c.statUnit); setVal('statCtxInput',c.statCtx);
+  setVal('ratingInput',c.rating); setVal('noteUrlInput',c.url);
+  // 개인화 필드
+  setVal('memoryDateInput',c.memoryDate); setVal('commentInput',c.comment);
+  setVal('commenterInput',c.commenter); setVal('commentLikesInput',c.commentLikes);
+  setVal('readProgressInput',c.readProgress);
   // 폰트 크기
-  const tsEl = document.getElementById('titleSizeInput');
-  if(tsEl) tsEl.value = c.titleSize||18;
+  const tsEl=document.getElementById('titleSizeInput'); if(tsEl) tsEl.value=c.titleSize||18;
 }
 
 function setVal(id,v){ const e=document.getElementById(id); if(e) e.value=v||''; }
 
 function updateDrawerFields(fmt){
-  const isBanner = fmt==='banner';
-  const isImage  = fmt==='image';
-  const isCard   = fmt==='card';
-  const isQuote  = fmt==='quote';
-  const isStat   = fmt==='stat';
+  const isBanner  = fmt==='banner';
+  const isImage   = fmt==='image';
+  const isCard    = fmt==='card';
+  const isQuote   = fmt==='quote';
+  const isStat    = fmt==='stat';
+  const isMemory  = fmt==='memory';
+  const isComment = fmt==='comment';
+  const isUnread  = fmt==='unread';
 
-  show('fg-bgimage',  isImage||isCard||isBanner);
-  show('fg-bgcolor',  isQuote||isStat);
-  show('fg-badge',    !isBanner);
-  show('fg-author',   !isBanner);
-  show('fg-title',    isImage||isCard||isBanner);
-  show('fg-titlesize',isImage||isCard||isBanner);
-  show('fg-insight',  isImage||isStat);
-  show('fg-quote',    isQuote);
-  show('fg-subtitle', isCard);
-  show('fg-stat',     isStat);
-  show('fg-rating',   isImage||isCard);
+  show('fg-bgimage',     isImage||isCard||isBanner||isMemory||isUnread||isComment);
+  show('fg-bgcolor',     isQuote||isStat);
+  show('fg-badge',       !isBanner&&!isComment);
+  show('fg-author',      !isBanner&&!isComment);
+  show('fg-title',       isImage||isCard||isBanner||isMemory||isComment||isUnread);
+  show('fg-titlesize',   isImage||isCard||isBanner||isMemory||isUnread);
+  show('fg-insight',     isImage||isStat||isMemory||isUnread);
+  show('fg-quote',       isQuote);
+  show('fg-subtitle',    isCard);
+  show('fg-stat',        isStat);
+  show('fg-rating',      isImage||isCard||isMemory);
+  // 개인화 전용
+  show('fg-memoryDate',  isMemory);
+  show('fg-comment',     isComment);
+  show('fg-commenter',   isComment);
+  show('fg-commentLikes',isComment);
+  show('fg-readProgress',isUnread);
 
-  el('bgImageLbl').textContent = isBanner ? '배너 이미지 (권장)' : '배경 이미지';
-  el('titleLbl').textContent   = isBanner ? '캡션 (선택)' : '제목';
-  el('insightLbl').textContent = isStat   ? '설명 문장' : '핵심 인사이트';
-  el('urlLbl').textContent     = isBanner ? '랜딩 URL' : '노트 URL';
+  el('bgImageLbl').textContent  = isBanner ? '배너 이미지 (권장)' : isComment ? '배경 이미지 (선택)' : '배경 이미지';
+  el('titleLbl').textContent    = isBanner ? '캡션 (선택)' : isComment ? '댓글 출처 노트 제목' : '제목';
+  el('insightLbl').textContent  = isStat ? '설명 문장' : isMemory ? '기억을 떠올릴 문장' : isUnread ? '마저 읽어야 할 이유' : '핵심 인사이트';
+  el('urlLbl').textContent      = isBanner ? '랜딩 URL' : '노트 URL';
 }
 
 function show(id,v){ const e=document.getElementById(id); if(e) e.style.display=v?'':'none'; }
 function el(id){ return document.getElementById(id); }
 
-// ─── FORMAT PICKER ───────────────────────────
 function pickFormat(target){
-  if (!isAdmin) return;
-  const fmt = target.dataset.fmt;
-  clips[curClipIdx].format = fmt;
-  document.querySelectorAll('.fmt-opt').forEach(o=>o.classList.toggle('active',o===target&&o.dataset.fmt!=='banner'));
+  if(!isAdmin) return;
+  const fmt=target.dataset.fmt;
+  clips[curClipIdx].format=fmt;
+  document.querySelectorAll('.fmt-opt').forEach(o=>o.classList.toggle('active',o===target));
   document.getElementById('fmtBanner').classList.toggle('active',fmt==='banner');
-  updateDrawerFields(fmt);
-  rerenderClip(curClipIdx);
-  saveNow();
+  updateDrawerFields(fmt); rerenderClip(curClipIdx); saveNow();
 }
 
-// ─── LIVE TEXT ───────────────────────────────
 function liveText(field, val){
-  if(!clips[curClipIdx] || !isAdmin) return;
-  clips[curClipIdx][field] = val;
+  if(!clips[curClipIdx]||!isAdmin) return;
+  clips[curClipIdx][field]=val;
   document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .live-${field}`).forEach(e=>{
-    e.textContent = val;
-    // 저자·인사이트: 값 없으면 부모 컨테이너 숨기기
-    if(field === 'author'){
-      const wrap = e.closest('.clip-author, .quote-attr');
-      if(wrap) wrap.style.display = val ? '' : 'none';
-    }
-    if(field === 'insight'){
-      const wrap = e.closest('.clip-insight, .stat-desc');
-      if(wrap) wrap.style.display = val ? '' : 'none';
-    }
+    e.textContent=val;
+    if(field==='author'){ const w=e.closest('.clip-author,.quote-attr'); if(w) w.style.display=val?'':'none'; }
+    if(field==='insight'){ const w=e.closest('.clip-insight,.stat-desc'); if(w) w.style.display=val?'':'none'; }
+    if(field==='commentLikes'){ const w=e.closest('.comment-likes-count'); if(w){ w.textContent=val?`❤️ ${val}명이 공감`:''; w.style.display=val?'':'none'; } }
   });
   saveDebounced();
 }
 
 function updateUrl(val){
-  if(!clips[curClipIdx] || !isAdmin) return;
-  clips[curClipIdx].url = val;
-  saveDebounced();
+  if(!clips[curClipIdx]||!isAdmin) return;
+  clips[curClipIdx].url=val; saveDebounced();
 }
 
-// ─── TITLE SIZE ──────────────────────────────
 function liveTitleSize(val){
-  if(!clips[curClipIdx] || !isAdmin) return;
-  clips[curClipIdx].titleSize = parseInt(val)||18;
-  document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .live-title`).forEach(e=>{
-    e.style.fontSize = val + 'px';
-  });
+  if(!clips[curClipIdx]||!isAdmin) return;
+  clips[curClipIdx].titleSize=parseInt(val)||18;
+  document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .live-title`).forEach(e=>e.style.fontSize=val+'px');
   saveDebounced();
 }
 
-// ─── BG / COLOR ──────────────────────────────
+function liveProgress(val){
+  if(!clips[curClipIdx]||!isAdmin) return;
+  const p=Math.max(1,Math.min(99,parseInt(val)||23));
+  clips[curClipIdx].readProgress=String(p);
+  document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .unread-prog-fill`).forEach(e=>e.style.width=p+'%');
+  document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .unread-prog-label`).forEach(e=>e.textContent=p+'% 읽음');
+  saveDebounced();
+}
+
 async function onFileUpload(e){
-  if (!isAdmin) return;
-  const file = e.target.files[0]; if(!file) return;
-  if (fbStorage) {
-    const thumb = el('imgThumb');
-    thumb.style.display = 'block';
-    thumb.style.background = 'rgba(200,169,110,.08)';
-    thumb.style.backgroundImage = 'none';
-    thumb.innerHTML = '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(200,169,110,.7);">업로드 중…</div>';
+  if(!isAdmin) return;
+  const file=e.target.files[0]; if(!file) return;
+  if(fbStorage){
+    const thumb=el('imgThumb');
+    thumb.style.display='block'; thumb.style.background='rgba(200,169,110,.08)'; thumb.style.backgroundImage='none';
+    thumb.innerHTML='<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(200,169,110,.7);">업로드 중…</div>';
     try {
-      const ref = fbStorage.ref(`clips/clip_${curClipIdx}_${Date.now()}`);
+      const ref=fbStorage.ref(`clips/clip_${curClipIdx}_${Date.now()}`);
       await ref.put(file);
-      const url = await ref.getDownloadURL();
-      thumb.innerHTML = '';
-      applyBg(url);
-    } catch(err) {
-      thumb.innerHTML = '';
-      const r = new FileReader();
-      r.onload = ev => applyBg(ev.target.result);
-      r.readAsDataURL(file);
-    }
+      const url=await ref.getDownloadURL();
+      thumb.innerHTML=''; applyBg(url);
+    } catch(err){ thumb.innerHTML=''; const r=new FileReader(); r.onload=ev=>applyBg(ev.target.result); r.readAsDataURL(file); }
   } else {
-    const r = new FileReader();
-    r.onload = ev => applyBg(ev.target.result);
-    r.readAsDataURL(file);
+    const r=new FileReader(); r.onload=ev=>applyBg(ev.target.result); r.readAsDataURL(file);
   }
 }
 function onImgUrl(url){
-  if (!isAdmin) return;
+  if(!isAdmin) return;
   if(!url){ clips[curClipIdx].bg=''; refreshBgAll(); el('imgThumb').style.display='none'; saveNow(); }
   else applyBg(url);
 }
 function applyBg(src){
-  clips[curClipIdx].bg=src;
-  refreshBgAll();
+  clips[curClipIdx].bg=src; refreshBgAll();
   const thumb=el('imgThumb');
-  thumb.style.backgroundImage=`url('${src}')`;
-  thumb.style.display='block';
-  rerenderClip(curClipIdx);
-  saveNow();
+  thumb.style.backgroundImage=`url('${src}')`; thumb.style.display='block';
+  rerenderClip(curClipIdx); saveNow();
 }
 function refreshBgAll(){
   const c=clips[curClipIdx];
@@ -1078,33 +1169,22 @@ function refreshBgAll(){
   });
 }
 function pickGrad(target){
-  if (!isAdmin) return;
-  clips[curClipIdx].bg='';
-  clips[curClipIdx].grad=target.dataset.g;
+  if(!isAdmin) return;
+  clips[curClipIdx].bg=''; clips[curClipIdx].grad=target.dataset.g;
   document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('sel',s===target));
-  el('imgThumb').style.display='none';
-  refreshBgAll();
-  rerenderClip(curClipIdx);
-  saveNow();
+  el('imgThumb').style.display='none'; refreshBgAll(); rerenderClip(curClipIdx); saveNow();
 }
-
-// ─── BADGE ───────────────────────────────────
 function pickBadge(target){
-  if (!isAdmin) return;
-  clips[curClipIdx].badge=target.dataset.val;
-  clips[curClipIdx].cls=target.dataset.cls;
+  if(!isAdmin) return;
+  clips[curClipIdx].badge=target.dataset.val; clips[curClipIdx].cls=target.dataset.cls;
   document.querySelectorAll('.badge-opt').forEach(o=>o.className='badge-opt'+(o===target?' sel-'+target.dataset.cls:''));
   document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .s-badge`).forEach(b=>{
-    b.textContent=clips[curClipIdx].badge;
-    b.className=`badge s-badge badge-${clips[curClipIdx].cls}`;
+    b.textContent=clips[curClipIdx].badge; b.className=`badge s-badge badge-${clips[curClipIdx].cls}`;
   });
   saveNow();
 }
-
-// ─── LIKE / SAVE ─────────────────────────────
 function toggleLike(clipIdx){
-  const c=clips[clipIdx];
-  c.liked=!c.liked; c.likes+=(c.liked?1:-1);
+  const c=clips[clipIdx]; c.liked=!c.liked; c.likes+=(c.liked?1:-1);
   document.querySelectorAll(`.clip-slide[data-clip="${clipIdx}"] .like-circle`).forEach(e=>e.style.background=c.liked?'rgba(200,50,50,.28)':'');
   document.querySelectorAll(`.clip-slide[data-clip="${clipIdx}"] .like-icon`).forEach(e=>{e.setAttribute('fill',c.liked?'#FF4444':'none');e.setAttribute('stroke',c.liked?'#FF4444':'white');});
   document.querySelectorAll(`.clip-slide[data-clip="${clipIdx}"] .like-count`).forEach(e=>e.textContent=fmtN(c.likes));
@@ -1112,8 +1192,7 @@ function toggleLike(clipIdx){
   if(cur){cur.style.transform='scale(1.28)';setTimeout(()=>cur.style.transform='',220);}
 }
 function toggleSave(clipIdx){
-  const c=clips[clipIdx];
-  c.saved=!c.saved;
+  const c=clips[clipIdx]; c.saved=!c.saved;
   document.querySelectorAll(`.clip-slide[data-clip="${clipIdx}"] .save-circle`).forEach(e=>e.style.background=c.saved?'rgba(200,169,110,.2)':'');
   document.querySelectorAll(`.clip-slide[data-clip="${clipIdx}"] .save-icon`).forEach(e=>{e.setAttribute('fill',c.saved?'#C8A96E':'none');e.setAttribute('stroke',c.saved?'#C8A96E':'white');});
   const cur=document.querySelector(`.clip-slide[data-clip="${clipIdx}"][data-i="${curVisibleDomIdx()}"] .save-circle`);
@@ -1123,50 +1202,39 @@ function curVisibleDomIdx(){
   const wrap=document.getElementById('scrollWrap');
   return Math.round(wrap.scrollTop/wrap.clientHeight);
 }
-
 function openNote(clipIdx){
   const url=clips[clipIdx]?.url;
   if(url&&!url.endsWith('/')) window.open(url,'_blank');
 }
-
-// ─── ADD / DELETE ────────────────────────────
 function addClip(){
-  if (!isAdmin) return;
+  if(!isAdmin) return;
   const idx=clips.length;
   clips.push({
     format:'image', bg:'', grad:GRADS[idx%GRADS.length], icon:ICONS[idx%ICONS.length],
-    titleSize:18,
-    badge:'브랜드', cls:'B', author:'저자 이름', title:'새 클립의 제목',
+    titleSize:18, badge:'브랜드', cls:'B', author:'저자 이름', title:'새 클립의 제목',
     insight:'핵심 인사이트를 입력하세요.', quote:'', subtitle:'',
     stat:'', statUnit:'', statCtx:'',
+    memoryDate:'', comment:'', commenter:'', commentLikes:'', readProgress:'',
     rating:'4.0', likes:0, liked:false, saved:false, url:'https://longblack.co/note/'
   });
-  curClipIdx = clips.length-1;
-  saveNow();
-  renderAll();
-  setupMainObs();
+  curClipIdx=clips.length-1; saveNow(); renderAll(); setupMainObs();
   requestAnimationFrame(()=>{
-    const target=document.querySelector(`.clip-slide[data-clip="${curClipIdx}"]`);
-    if(target) target.scrollIntoView({behavior:'smooth'});
+    const t=document.querySelector(`.clip-slide[data-clip="${curClipIdx}"]`);
+    if(t) t.scrollIntoView({behavior:'smooth'});
     if(drawerOpen) fillDrawer();
   });
 }
-
 function deleteClip(){
-  if (!isAdmin) return;
+  if(!isAdmin) return;
   if(clips.length<=1){alert('클립은 최소 1개 필요해요.');return;}
-  clips.splice(curClipIdx,1);
-  curClipIdx=Math.min(curClipIdx,clips.length-1);
-  saveNow();
-  renderAll();
-  setupMainObs();
-  if(drawerOpen) fillDrawer();
+  clips.splice(curClipIdx,1); curClipIdx=Math.min(curClipIdx,clips.length-1);
+  saveNow(); renderAll(); setupMainObs(); if(drawerOpen) fillDrawer();
 }
 
-// ─── INIT ─────────────────────────────────────
-if (isAdmin) document.getElementById('editBtn').style.display = 'flex';
+if(isAdmin) document.getElementById('editBtn').style.display='flex';
 startSync();
 </script>
 </body>
 </html>
+
 
