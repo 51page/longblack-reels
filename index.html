@@ -280,6 +280,38 @@ textarea.form-input { min-height:58px; }
   position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
   width:134px; height:5px; background:rgba(255,255,255,.22); border-radius:3px; z-index:400;
 }
+
+/* ── 실제 모바일 기기: 전체화면 모드 ── */
+@media (max-width: 768px) {
+  body {
+    align-items: stretch;
+    justify-content: stretch;
+    min-height: 100dvh;
+  }
+  .phone {
+    width: 100vw;
+    height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .dynamic-island { display: none; }
+  .home-bar { display: none; }
+  .fixed-top {
+    padding-top: max(18px, env(safe-area-inset-top, 18px));
+  }
+  .s-bottom-image,
+  .s-bottom-quote,
+  .s-bottom-stat,
+  .s-bottom-banner {
+    padding-bottom: max(28px, calc(env(safe-area-inset-bottom, 0px) + 20px));
+  }
+  .card-panel {
+    padding-bottom: max(28px, calc(env(safe-area-inset-bottom, 0px) + 20px));
+  }
+  .s-actions { bottom: 22vh; }
+  .clip-slide[data-format="card"]   .s-actions { top: 10vh; }
+  .clip-slide[data-format="banner"] .s-actions { top: 14vh; }
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
