@@ -47,8 +47,7 @@ body {
   content:''; position:absolute; inset:0;
   background:linear-gradient(to bottom,rgba(0,0,0,.12),rgba(0,0,0,.48));
 }
-.clip-slide[data-format="banner"] .clip-bg::after,
-.clip-slide[data-format="comment"] .clip-bg::after {
+.clip-slide[data-format="banner"] .clip-bg::after {
   content:''; position:absolute; inset:0;
   background:linear-gradient(to bottom,rgba(0,0,0,.0) 0%,rgba(0,0,0,.0) 40%,rgba(0,0,0,.82) 100%);
 }
@@ -164,62 +163,121 @@ body {
 }
 .banner-cta:active { opacity:.85; }
 
-/* ── FORMAT 6: MEMORY (1년 전 오늘) ── */
-.memory-top-badge {
-  position:absolute; top:68px; left:18px; z-index:10;
-  display:inline-flex; align-items:center; gap:5px;
-  font-size:11px; font-weight:700; letter-spacing:.04em; color:#fff;
-  background:rgba(200,169,110,.85); padding:5px 13px; border-radius:20px;
+/* ── FORMAT 6: MEMORY — 따뜻한 필름 타임캡슐 ── */
+/* Warm amber gradient override (higher specificity via content attr) */
+.clip-slide[data-format="memory"] .clip-bg::after {
+  background:linear-gradient(165deg,rgba(110,45,0,.6) 0%,rgba(0,0,0,.04) 38%,rgba(0,0,0,.04) 55%,rgba(75,28,0,.75) 100%) !important;
 }
-.memory-date-sub {
-  position:absolute; top:108px; left:20px; z-index:10;
-  font-size:11px; color:rgba(255,255,255,.45); font-weight:500; letter-spacing:.01em;
+.memory-warm {
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:rgba(150,70,5,.18); mix-blend-mode:color;
+}
+.memory-grain {
+  position:absolute; inset:0; z-index:2; pointer-events:none; opacity:.2;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px 200px; mix-blend-mode:overlay;
+}
+.memory-date-hero {
+  position:absolute; top:60px; left:0; right:0; z-index:10;
+  text-align:center; pointer-events:none;
+}
+.memory-label-top { font-size:9px; font-weight:700; letter-spacing:.28em; color:rgba(255,210,120,.65); text-transform:uppercase; margin-bottom:6px; }
+.memory-day-big { font-size:72px; font-weight:900; color:rgba(255,225,155,.9); letter-spacing:-.06em; line-height:1; }
+.memory-month-year { font-size:11.5px; font-weight:600; color:rgba(255,200,100,.5); letter-spacing:.14em; margin-top:5px; text-transform:uppercase; }
+.memory-rule {
+  position:absolute; top:50%; left:24px; right:24px; z-index:5; pointer-events:none;
+  height:1px; background:linear-gradient(to right,transparent,rgba(210,155,55,.32) 22%,rgba(210,155,55,.32) 78%,transparent);
 }
 .s-bottom-memory { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px; }
-.memory-title { font-size:18px; font-weight:700; color:#fff; line-height:1.42; letter-spacing:-.025em; margin-bottom:10px; }
+.memory-title { font-size:18px; font-weight:700; color:rgba(255,230,185,.96); line-height:1.42; letter-spacing:-.025em; margin-bottom:10px; }
 .memory-btn {
-  width:100%; height:44px; background:rgba(200,169,110,.15); border-radius:11px;
-  border:1px solid rgba(200,169,110,.38); cursor:pointer; font-size:13.5px; font-weight:700;
-  color:var(--gold); font-family:inherit; display:flex; align-items:center; justify-content:center;
+  width:100%; height:44px; background:rgba(170,100,10,.22); border-radius:11px;
+  border:1px solid rgba(215,160,55,.38); cursor:pointer; font-size:13.5px; font-weight:700;
+  color:rgba(255,210,120,.92); font-family:inherit; display:flex; align-items:center; justify-content:center;
   gap:5px; letter-spacing:-.01em; transition:opacity .15s;
 }
 .memory-btn:active { opacity:.8; }
 
-/* ── FORMAT 7: COMMENT (추천 댓글) ── */
-.comment-center {
-  position:absolute; top:50%; left:0; right:0; transform:translateY(-60%);
-  padding:0 28px; text-align:center; z-index:10;
+/* ── FORMAT 7: COMMENT — 밝은 채팅 버블 UI ── */
+.clip-slide[data-format="comment"] { background:#EEEAE0; }
+.clip-slide[data-format="comment"] .clip-bg { opacity:.05; filter:grayscale(100%); }
+.clip-slide[data-format="comment"] .clip-bg::after { display:none !important; }
+.comment-bubble-wrap {
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; padding:70px 22px 175px; z-index:10;
 }
-.comment-qmark { font-size:72px; line-height:.7; color:rgba(200,169,110,.55); font-family:Georgia,serif; margin-bottom:14px; display:block; }
-.comment-text { font-size:17px; font-weight:400; color:#fff; line-height:1.75; letter-spacing:-.02em; word-break:keep-all; margin-bottom:22px; }
-.comment-user-row { display:flex; align-items:center; justify-content:center; gap:10px; }
-.comment-avatar {
-  width:34px; height:34px; border-radius:50%;
-  background:rgba(200,169,110,.22); border:1.5px solid rgba(200,169,110,.38);
+.comment-bubble {
+  background:#fff; border-radius:22px 22px 22px 5px;
+  box-shadow:0 8px 40px rgba(0,0,0,.14),0 2px 8px rgba(0,0,0,.06);
+  padding:20px 20px 16px; width:100%; position:relative;
+}
+.comment-bubble::after {
+  content:''; position:absolute; bottom:-10px; left:20px;
+  width:0; height:0;
+  border-left:14px solid transparent;
+  border-right:4px solid transparent;
+  border-top:12px solid #fff;
+}
+.comment-bubble-qmark { font-size:26px; color:#C8A96E; font-family:Georgia,serif; line-height:1; margin-bottom:8px; display:block; }
+.comment-bubble-text { font-size:15px; font-weight:500; color:#1C1C1C; line-height:1.7; letter-spacing:-.018em; word-break:keep-all; }
+.comment-sender-row { display:flex; align-items:center; gap:10px; margin-top:14px; padding-top:12px; border-top:1px solid rgba(0,0,0,.07); }
+.comment-avatar-grad {
+  width:36px; height:36px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(135deg,#6B73FF 0%,#9B59B6 100%);
   display:flex; align-items:center; justify-content:center;
-  font-size:13px; font-weight:700; color:var(--gold); flex-shrink:0;
+  font-size:14px; font-weight:700; color:#fff;
 }
-.comment-user-info { text-align:left; }
-.comment-username { font-size:12px; font-weight:600; color:rgba(255,255,255,.82); }
-.comment-likes-count { font-size:10.5px; color:rgba(255,255,255,.38); margin-top:2px; }
-.s-bottom-comment { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px; }
-.comment-from-lbl { font-size:9px; font-weight:700; color:var(--gold); letter-spacing:.12em; text-transform:uppercase; margin-bottom:5px; }
-.comment-note-ref { font-size:13px; font-weight:600; color:rgba(255,255,255,.65); line-height:1.4; letter-spacing:-.01em; margin-bottom:13px; }
+.comment-sender-name { font-size:12.5px; font-weight:700; color:#2a2a2a; }
+.comment-sender-likes { font-size:11px; color:#999; margin-top:2px; }
+.comment-reactions { display:flex; gap:5px; margin-top:10px; flex-wrap:wrap; }
+.comment-reaction-chip {
+  display:inline-flex; align-items:center; gap:3px; padding:4px 10px; border-radius:16px;
+  background:rgba(0,0,0,.06); font-size:10.5px; font-weight:600; color:#555;
+}
+.clip-slide[data-format="comment"] .action-circle {
+  background:rgba(20,15,5,.52); border-color:rgba(0,0,0,.14);
+}
+.clip-slide[data-format="comment"] .action-label { color:rgba(0,0,0,.4); }
+.s-bottom-comment {
+  position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px;
+  background:linear-gradient(to top,#EEEAE0 62%,rgba(238,234,224,0));
+}
+.comment-from-lbl { font-size:9px; font-weight:700; color:#A08040; letter-spacing:.12em; text-transform:uppercase; margin-bottom:5px; }
+.comment-note-ref { font-size:13px; font-weight:600; color:rgba(0,0,0,.52); line-height:1.4; letter-spacing:-.01em; margin-bottom:13px; }
 
-/* ── FORMAT 8: UNREAD (클릭 후 미읽음) ── */
-.unread-top-badge {
-  position:absolute; top:68px; left:18px; z-index:10;
-  display:inline-flex; align-items:center; gap:5px;
-  font-size:11px; font-weight:700; letter-spacing:.04em; color:rgba(255,255,255,.85);
-  background:rgba(255,255,255,.1); backdrop-filter:blur(8px);
-  border:1px solid rgba(255,255,255,.16); padding:5px 13px; border-radius:20px;
+/* ── FORMAT 8: UNREAD — 독서 진행 링 ── */
+.unread-bookmark {
+  position:absolute; top:0; right:72px; z-index:12; pointer-events:none;
+  width:20px; height:38px; background:var(--gold);
+  clip-path:polygon(0 0,100% 0,100% 80%,50% 100%,0 80%);
+}
+.unread-ring-section {
+  position:absolute; top:0; left:0; right:0; bottom:50%; z-index:10;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding-top:48px;
+}
+.unread-ring-wrap { position:relative; width:128px; height:128px; }
+.unread-ring-svg { width:128px; height:128px; transform:rotate(-90deg); }
+.unread-ring-bg-c { fill:none; stroke:rgba(255,255,255,.12); stroke-width:9; }
+.unread-ring-arc { fill:none; stroke:var(--gold); stroke-width:9; stroke-linecap:round; }
+.unread-ring-center {
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; text-align:center;
+}
+.unread-ring-pct { font-size:30px; font-weight:900; color:#fff; letter-spacing:-.04em; line-height:1; }
+.unread-ring-lbl { font-size:9px; font-weight:700; color:rgba(255,255,255,.42); letter-spacing:.1em; margin-top:3px; text-transform:uppercase; }
+.unread-ring-badge { font-size:10.5px; font-weight:600; color:rgba(255,255,255,.48); margin-top:10px; letter-spacing:.03em; }
+.unread-zone-line {
+  position:absolute; top:50%; left:0; right:0; z-index:6; pointer-events:none; transform:translateY(-50%);
+}
+.unread-zone-rule { height:1px; background:linear-gradient(to right,transparent,rgba(255,255,255,.2) 20%,rgba(255,255,255,.2) 80%,transparent); }
+.unread-zone-lbl { text-align:center; font-size:9px; font-weight:700; letter-spacing:.18em; color:rgba(255,255,255,.3); margin-top:5px; text-transform:uppercase; }
+.unread-lower-fade {
+  position:absolute; top:50%; left:0; right:0; height:42%; z-index:5; pointer-events:none;
+  background:linear-gradient(to bottom,rgba(10,10,10,0),rgba(10,10,10,.52));
 }
 .s-bottom-unread { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px; }
-.unread-title { font-size:18px; font-weight:700; color:#fff; line-height:1.42; letter-spacing:-.025em; margin-bottom:12px; }
-.unread-prog-wrap { display:flex; align-items:center; gap:10px; margin-bottom:13px; }
-.unread-prog-bar { flex:1; height:4px; background:rgba(255,255,255,.14); border-radius:2px; overflow:hidden; }
-.unread-prog-fill { height:100%; background:var(--gold); border-radius:2px; }
-.unread-prog-label { font-size:10.5px; font-weight:700; color:var(--gold); white-space:nowrap; flex-shrink:0; }
+.unread-title { font-size:17px; font-weight:700; color:rgba(255,255,255,.75); line-height:1.42; letter-spacing:-.025em; margin-bottom:14px; }
 .continue-btn {
   width:100%; height:44px; background:#fff; border-radius:11px; border:none;
   cursor:pointer; font-size:13.5px; font-weight:700; color:#0A0A0A;
@@ -875,41 +933,59 @@ function slideBanner(c, clipIdx){
   </div>`;
 }
 
-// ── [NEW] FORMAT 6: 1년 전 오늘 ──────────────────────────
+// ── [NEW] FORMAT 6: 1년 전 오늘 — 필름 타임캡슐 ─────────
 function slideMemory(c, clipIdx){
   const fs = c.titleSize||18;
   const dateStr = c.memoryDate || lastYearDateStr();
+  // Parse date into parts for big display
+  const parts = dateStr.split(/[\.\-\/]/);
+  const year = parts[0]||''; const mo = parts[1]||''; const day = parts[2]||'';
+  const monthNames=['','JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  const monthLabel = monthNames[parseInt(mo,10)]||mo;
   return `
   <div class="clip-bg" style="${bgStyle(c)}"></div>
-  ${!c.bg?`<div class="clip-icon" style="opacity:.32">${c.icon}</div>`:''}
-  <div class="memory-top-badge">📅 1년 전 오늘</div>
-  <div class="memory-date-sub">${esc(dateStr)}</div>
+  <div class="memory-warm"></div>
+  <div class="memory-grain"></div>
+  ${!c.bg?`<div class="clip-icon" style="opacity:.18;filter:sepia(1) saturate(.6)">${c.icon}</div>`:''}
+  <div class="memory-date-hero">
+    <div class="memory-label-top">1년 전 오늘</div>
+    <div class="memory-day-big">${day||'--'}</div>
+    <div class="memory-month-year">${monthLabel} ${year}</div>
+  </div>
+  <div class="memory-rule"></div>
   ${actionsHTML(c,clipIdx)}
   <div class="s-bottom-memory">
     <div class="clip-meta">
       <span class="badge s-badge badge-${c.cls}">${esc(c.badge)}</span>
-      ${c.author?`<span class="clip-author live-author">${esc(c.author)}</span>`:'<span class="clip-author live-author" style="display:none"></span>'}
+      ${c.author?`<span class="clip-author live-author" style="color:rgba(255,210,130,.5)">${esc(c.author)}</span>`:'<span class="clip-author live-author" style="display:none"></span>'}
     </div>
     <div class="memory-title live-title" style="font-size:${fs}px">${esc(c.title)}</div>
-    ${c.insight?`<div class="clip-insight"><div class="insight-label">기억나시나요?</div><div class="insight-text live-insight">${esc(c.insight)}</div></div>`:`<div class="clip-insight" style="display:none"><div class="insight-label">기억나시나요?</div><div class="insight-text live-insight"></div></div>`}
+    ${c.insight?`<div class="clip-insight"><div class="insight-label" style="color:rgba(200,145,55,.8)">기억나시나요?</div><div class="insight-text live-insight" style="color:rgba(255,210,140,.68)">${esc(c.insight)}</div></div>`:`<div class="clip-insight" style="display:none"><div class="insight-label">기억나시나요?</div><div class="insight-text live-insight"></div></div>`}
     <button class="memory-btn" onclick="openNote(${clipIdx})">다시 읽기 ${ARROW_SVG}</button>
   </div>`;
 }
 
-// ── [NEW] FORMAT 7: 추천 댓글 ────────────────────────────
+// ── [NEW] FORMAT 7: 추천 댓글 — 밝은 채팅 버블 UI ────────
 function slideComment(c, clipIdx){
   const initial = (c.commenter||'익').charAt(0);
+  const likesTxt = c.commentLikes ? `❤️ ${esc(c.commentLikes)}명 공감` : '❤️ 공감';
   return `
   <div class="clip-bg" style="${bgStyle(c)}"></div>
-  ${!c.bg?`<div class="clip-icon" style="opacity:.18">${c.icon}</div>`:''}
-  <div class="comment-center">
-    <span class="comment-qmark">"</span>
-    <div class="comment-text live-comment">${esc(c.comment||'댓글을 입력하세요')}</div>
-    <div class="comment-user-row">
-      <div class="comment-avatar">${esc(initial)}</div>
-      <div class="comment-user-info">
-        <div class="comment-username live-commenter">${esc(c.commenter||'익명 독자')}</div>
-        ${c.commentLikes?`<div class="comment-likes-count live-commentLikes">❤️ ${esc(c.commentLikes)}명이 공감</div>`:'<div class="comment-likes-count live-commentLikes" style="display:none"></div>'}
+  <div class="comment-bubble-wrap">
+    <div class="comment-bubble">
+      <span class="comment-bubble-qmark">"</span>
+      <div class="comment-bubble-text live-comment">${esc(c.comment||'댓글을 입력하세요')}</div>
+      <div class="comment-sender-row">
+        <div class="comment-avatar-grad">${esc(initial)}</div>
+        <div>
+          <div class="comment-sender-name live-commenter">${esc(c.commenter||'익명 독자')}</div>
+          <div class="comment-sender-likes live-commentLikes">${likesTxt}</div>
+        </div>
+      </div>
+      <div class="comment-reactions">
+        <span class="comment-reaction-chip">💡 인사이트</span>
+        <span class="comment-reaction-chip">🔥 공감</span>
+        <span class="comment-reaction-chip">💬 토론</span>
       </div>
     </div>
   </div>
@@ -917,18 +993,40 @@ function slideComment(c, clipIdx){
   <div class="s-bottom-comment">
     <div class="comment-from-lbl">이 댓글이 달린 노트</div>
     <div class="comment-note-ref live-title">${esc(c.title)}</div>
-    <div class="bottom-cta"><button class="read-btn" onclick="openNote(${clipIdx})">노트 전체 읽기 ${ARROW_SVG}</button></div>
+    <div class="bottom-cta"><button class="read-btn" style="background:#1C1C1C;color:#fff" onclick="openNote(${clipIdx})">노트 전체 읽기 ${ARROW_SVG}</button></div>
   </div>`;
 }
 
-// ── [NEW] FORMAT 8: 클릭 후 미읽음 ──────────────────────
+// ── [NEW] FORMAT 8: 클릭 후 미읽음 — 독서 링 ────────────
 function slideUnread(c, clipIdx){
   const fs = c.titleSize||18;
   const prog = parseInt(c.readProgress)||23;
+  // SVG ring: r=54, circumference = 2π×54 ≈ 339.3
+  const circ = 339.3;
+  const offset = (circ * (1 - prog/100)).toFixed(1);
   return `
   <div class="clip-bg" style="${bgStyle(c)}"></div>
-  ${!c.bg?`<div class="clip-icon" style="opacity:.28">${c.icon}</div>`:''}
-  <div class="unread-top-badge">📖 읽다가 멈춘 노트</div>
+  ${!c.bg?`<div class="clip-icon" style="opacity:.22">${c.icon}</div>`:''}
+  <div class="unread-bookmark"></div>
+  <div class="unread-ring-section">
+    <div class="unread-ring-wrap">
+      <svg class="unread-ring-svg" viewBox="0 0 128 128">
+        <circle class="unread-ring-bg-c" cx="64" cy="64" r="54"/>
+        <circle class="unread-ring-arc live-unread-ring" cx="64" cy="64" r="54"
+          stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/>
+      </svg>
+      <div class="unread-ring-center">
+        <div class="unread-ring-pct live-unread-pct">${prog}%</div>
+        <div class="unread-ring-lbl">읽음</div>
+      </div>
+    </div>
+    <div class="unread-ring-badge">📖 읽다가 멈춘 노트</div>
+  </div>
+  <div class="unread-zone-line">
+    <div class="unread-zone-rule"></div>
+    <div class="unread-zone-lbl">여기서 멈췄어요</div>
+  </div>
+  <div class="unread-lower-fade"></div>
   ${actionsHTML(c,clipIdx)}
   <div class="s-bottom-unread">
     <div class="clip-meta">
@@ -936,11 +1034,6 @@ function slideUnread(c, clipIdx){
       ${c.author?`<span class="clip-author live-author">${esc(c.author)}</span>`:'<span class="clip-author live-author" style="display:none"></span>'}
     </div>
     <div class="unread-title live-title" style="font-size:${fs}px">${esc(c.title)}</div>
-    <div class="unread-prog-wrap">
-      <div class="unread-prog-bar"><div class="unread-prog-fill" style="width:${prog}%"></div></div>
-      <span class="unread-prog-label live-readProgress-label">${prog}% 읽음</span>
-    </div>
-    ${c.insight?`<div class="clip-insight" style="margin-bottom:14px"><div class="insight-label">마저 읽어야 할 이유</div><div class="insight-text live-insight">${esc(c.insight)}</div></div>`:`<div class="clip-insight" style="display:none;margin-bottom:14px"><div class="insight-label">마저 읽어야 할 이유</div><div class="insight-text live-insight"></div></div>`}
     <button class="continue-btn" onclick="openNote(${clipIdx})">이어서 읽기 ${ARROW_SVG}</button>
   </div>`;
 }
@@ -1128,8 +1221,11 @@ function liveProgress(val){
   if(!clips[curClipIdx]||!isAdmin) return;
   const p=Math.max(1,Math.min(99,parseInt(val)||23));
   clips[curClipIdx].readProgress=String(p);
-  document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .unread-prog-fill`).forEach(e=>e.style.width=p+'%');
-  document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .unread-prog-label`).forEach(e=>e.textContent=p+'% 읽음');
+  const circ=339.3; const offset=(circ*(1-p/100)).toFixed(1);
+  document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .live-unread-ring`).forEach(e=>{
+    e.setAttribute('stroke-dasharray',String(circ)); e.setAttribute('stroke-dashoffset',offset);
+  });
+  document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .live-unread-pct`).forEach(e=>e.textContent=p+'%');
   saveDebounced();
 }
 
@@ -1236,5 +1332,6 @@ startSync();
 </script>
 </body>
 </html>
+
 
 
