@@ -99,7 +99,7 @@ body {
 .clip-author { font-size:11.5px; color:rgba(255,255,255,.48); }
 
 /* ── FORMAT 1: IMAGE ── */
-.s-bottom-image { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px; }
+.s-bottom-image { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 20px 36px 20px; }
 .clip-title { font-size:18px; font-weight:700; color:#fff; line-height:1.42; letter-spacing:-.025em; margin-bottom:10px; }
 .clip-insight {
   border-left:2px solid var(--gold); padding:8px 12px; margin-bottom:14px;
@@ -116,13 +116,13 @@ body {
 .quote-mark { font-size:80px; line-height:.7; color:var(--gold); opacity:.7; font-family:Georgia,serif; margin-bottom:12px; display:block; }
 .quote-text { font-size:20px; font-weight:400; color:#fff; line-height:1.7; letter-spacing:-.02em; word-break:keep-all; }
 .quote-attr { margin-top:20px; font-size:12.5px; color:var(--gold); font-weight:600; letter-spacing:.04em; }
-.s-bottom-quote { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px; }
+.s-bottom-quote { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 20px 36px 20px; }
 
 /* ── FORMAT 3: CARD ── */
 .card-panel {
   position:absolute; bottom:0; left:0; right:0; height:47%;
   background:var(--black); z-index:10;
-  padding:20px 72px 0 18px; display:flex; flex-direction:column;
+  padding:20px 20px 0 20px; display:flex; flex-direction:column;
 }
 .card-title { font-size:22px; font-weight:800; color:#fff; line-height:1.32; letter-spacing:-.03em; margin:8px 0 10px; flex:1; }
 .card-sub { font-size:13px; color:rgba(255,255,255,.5); line-height:1.6; letter-spacing:-.01em; margin-bottom:14px; }
@@ -138,7 +138,7 @@ body {
 .stat-number { font-size:92px; font-weight:800; color:#fff; line-height:1; letter-spacing:-.04em; }
 .stat-unit { font-size:36px; font-weight:700; color:rgba(255,255,255,.55); line-height:1; padding-bottom:8px; }
 .stat-desc { margin-top:18px; font-size:14.5px; color:rgba(255,255,255,.62); line-height:1.65; letter-spacing:-.015em; word-break:keep-all; }
-.s-bottom-stat { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px; }
+.s-bottom-stat { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 20px 36px 20px; }
 
 /* ── FORMAT 5: BANNER ── */
 .banner-tag {
@@ -153,7 +153,7 @@ body {
 }
 .banner-ph-icon { font-size:40px; opacity:.3; }
 .banner-ph-text { font-size:13px; color:rgba(255,255,255,.25); letter-spacing:.02em; }
-.s-bottom-banner { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px; }
+.s-bottom-banner { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 20px 36px 20px; }
 .banner-caption { font-size:22px; font-weight:800; color:#fff; letter-spacing:-.03em; line-height:1.3; margin-bottom:14px; }
 .banner-cta {
   width:100%; height:46px; background:var(--gold); border-radius:11px; border:none;
@@ -180,19 +180,15 @@ body {
 .memory-date-hero {
   position:absolute; top:130px; left:0; right:0; z-index:10;
   text-align:center; pointer-events:none;
-  width:fit-content; margin:0 auto;
-  background:#000
-  border:1px solid rgba(200,150,60,.3);
-  padding:14px 28px;
 }
-.memory-label-top { font-size:30px; font-weight:700; letter-spacing:.12em; color:rgba(255,210,120,.65); text-transform:uppercase; margin-bottom:6px; }
-.memory-day-big { font-size:88px; font-weight:900; color:rgba(255,225,155,.9); letter-spacing:-.06em; line-height:1; }
-.memory-month-year { font-size:14px; font-weight:600; color:rgba(255,200,100,.5); letter-spacing:.14em; margin-top:5px; text-transform:uppercase; }
+.memory-label-top { font-size:11px; font-weight:700; letter-spacing:.12em; color:rgba(255,210,120,.65); text-transform:uppercase; margin-bottom:6px; }
+.memory-day-big { font-size:72px; font-weight:900; color:rgba(255,225,155,.9); letter-spacing:-.06em; line-height:1; }
+.memory-month-year { font-size:11.5px; font-weight:600; color:rgba(255,200,100,.5); letter-spacing:.14em; margin-top:5px; text-transform:uppercase; }
 .memory-rule {
   position:absolute; top:50%; left:24px; right:24px; z-index:5; pointer-events:none;
   height:1px; background:linear-gradient(to right,transparent,rgba(210,155,55,.32) 22%,rgba(210,155,55,.32) 78%,transparent);
 }
-.s-bottom-memory { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px; }
+.s-bottom-memory { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 20px 36px 20px; }
 .memory-title { font-size:18px; font-weight:700; color:rgba(255,230,185,.96); line-height:1.42; letter-spacing:-.025em; margin-bottom:10px; }
 .memory-btn {
   width:100%; height:44px; background:rgba(170,100,10,.22); border-radius:11px;
@@ -243,7 +239,7 @@ body {
 }
 .clip-slide[data-format="comment"] .action-label { color:rgba(0,0,0,.4); }
 .s-bottom-comment {
-  position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px;
+  position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 20px 36px 20px;
   background:linear-gradient(to top,#EEEAE0 62%,rgba(238,234,224,0));
 }
 .comment-from-lbl { font-size:9px; font-weight:700; color:#A08040; letter-spacing:.12em; text-transform:uppercase; margin-bottom:5px; }
@@ -280,7 +276,7 @@ body {
   position:absolute; top:50%; left:0; right:0; height:42%; z-index:5; pointer-events:none;
   background:linear-gradient(to bottom,rgba(10,10,10,0),rgba(10,10,10,.52));
 }
-.s-bottom-unread { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 72px 36px 18px; }
+.s-bottom-unread { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 20px 36px 20px; }
 .unread-title { font-size:17px; font-weight:700; color:rgba(255,255,255,.75); line-height:1.42; letter-spacing:-.025em; margin-bottom:14px; }
 .continue-btn {
   width:100%; height:44px; background:#fff; border-radius:11px; border:none;
@@ -441,6 +437,52 @@ textarea.form-input { min-height:58px; }
   .clip-slide[data-format="banner"]  .s-actions { top:14vh; }
   .clip-slide[data-format="comment"] .s-actions { top:14vh; }
 }
+
+/* ── FORMAT 6: MEMORY — 리디자인된 히어로 영역 ── */
+.memory-hero-wrap {
+  position:absolute; top:0; left:0; right:0; height:54%;
+  z-index:10; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  pointer-events:none; gap:0;
+}
+.memory-pre-label {
+  font-size:9px; font-weight:800; letter-spacing:.22em;
+  color:rgba(200,155,50,.55); text-transform:uppercase; margin-bottom:16px;
+}
+.memory-ago-badge {
+  display:flex; align-items:center; gap:9px;
+  border:2.5px solid rgba(255,195,65,.6);
+  border-radius:16px; padding:11px 26px;
+  background:rgba(180,100,10,.18); backdrop-filter:blur(8px);
+  margin-bottom:24px; position:relative;
+}
+.memory-ago-badge::before, .memory-ago-badge::after {
+  content:''; position:absolute; left:50%; transform:translateX(-50%);
+  width:1px; background:rgba(210,155,55,.3);
+}
+.memory-ago-badge::before { top:-14px; height:14px; }
+.memory-ago-badge::after  { bottom:-14px; height:14px; }
+.memory-ago-icon { font-size:22px; }
+.memory-ago-text {
+  font-size:26px; font-weight:900;
+  color:rgba(255,225,120,.97); letter-spacing:-.02em;
+}
+.memory-date-display { text-align:center; }
+.memory-date-day {
+  display:block; font-size:116px; font-weight:900;
+  color:rgba(255,235,165,.93); letter-spacing:-.06em; line-height:.95;
+}
+.memory-date-myr {
+  display:block; font-size:13px; font-weight:700;
+  letter-spacing:.2em; color:rgba(255,195,80,.55);
+  text-transform:uppercase; margin-top:8px;
+}
+.memory-divider {
+  width:36px; height:2px;
+  background:linear-gradient(to right,transparent,rgba(210,155,55,.45),transparent);
+  border-radius:2px; margin:18px auto 0;
+}
+
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -454,7 +496,7 @@ textarea.form-input { min-height:58px; }
   <div class="fixed-top">
     <div class="progress-bar" id="progressBar"></div>
     <div class="top-nav">
-      <div class="logo">LONGBLACK</div>
+      <div class="logo"></div>
       <div class="top-right">
         <button class="edit-btn" id="editBtn" onclick="toggleDrawer()" style="display:none">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -590,6 +632,29 @@ textarea.form-input { min-height:58px; }
         <label class="form-label">인용 문장</label>
         <textarea class="form-input" id="quoteInput" rows="4" placeholder="인용할 핵심 문장" oninput="liveText('quote',this.value)"></textarea>
       </div>
+      <div class="row2" id="fg-quoteStyle" style="display:none">
+        <div class="form-group">
+          <label class="form-label">폰트 크기</label>
+          <select class="form-input" id="quoteSizeInput" onchange="liveQuoteSize(this.value)">
+            <option value="14">14 — 아주 작게</option>
+            <option value="16">16 — 작게</option>
+            <option value="18">18 — 조금 작게</option>
+            <option value="20">20 — 기본</option>
+            <option value="24">24 — 크게</option>
+            <option value="28">28 — 아주 크게</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">세로 위치</label>
+          <select class="form-input" id="quoteTopInput" onchange="liveQuoteTop(this.value)">
+            <option value="22">맨 위</option>
+            <option value="35">약간 위</option>
+            <option value="50">중앙</option>
+            <option value="62">약간 아래</option>
+            <option value="72">아래쪽</option>
+          </select>
+        </div>
+      </div>
 
       <!-- SUBTITLE (card) -->
       <div class="form-group" id="fg-subtitle" style="display:none">
@@ -621,6 +686,16 @@ textarea.form-input { min-height:58px; }
       <div class="form-group" id="fg-memoryDate" style="display:none">
         <label class="form-label">날짜 표시 (1년 전)</label>
         <input class="form-input" type="text" id="memoryDateInput" placeholder="2024년 7월 25일" oninput="liveText('memoryDate',this.value)">
+      </div>
+      <div class="form-group" id="fg-memoryTop" style="display:none">
+        <label class="form-label">날짜 박스 세로 위치</label>
+        <select class="form-input" id="memoryTopInput" onchange="liveMemoryTop(this.value)">
+          <option value="80">맨 위</option>
+          <option value="110">약간 위</option>
+          <option value="140">중앙</option>
+          <option value="180">약간 아래</option>
+          <option value="220">아래쪽</option>
+        </select>
       </div>
 
       <!-- COMMENT -->
@@ -793,22 +868,35 @@ async function doSave(){
 function saveNow(){ doSave(); }
 function saveDebounced(){ clearTimeout(_saveTimer); _saveTimer = setTimeout(doSave, 700); }
 
+function shuffleClips(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+}
+
 function startSync(){
   if (db) {
     db.collection('longblack').doc('clips').onSnapshot(snap => {
       if (_isSaving) { _isSaving = false; return; }
       const wrap = document.getElementById('scrollWrap');
       const prevScroll = wrap.scrollTop;
-      if (!snap.exists) { renderAll(); setupMainObs(); if(isAdmin) doSave(); return; }
+      if (!snap.exists) {
+        if(!isAdmin) shuffleClips(clips);
+        renderAll(); setupMainObs(); if(isAdmin) doSave(); return;
+      }
       try { clips = JSON.parse(snap.data().data); } catch(e) { return; }
+      if(!isAdmin) shuffleClips(clips);
       renderAll(); setupMainObs();
       requestAnimationFrame(() => { wrap.scrollTop = prevScroll; });
     }, err => {
       try { const s=localStorage.getItem('lb_clips'); if(s) clips=JSON.parse(s); } catch(e){}
+      if(!isAdmin) shuffleClips(clips);
       renderAll(); setupMainObs();
     });
   } else {
     try { const s=localStorage.getItem('lb_clips'); if(s) clips=JSON.parse(s); } catch(e){}
+    if(!isAdmin) shuffleClips(clips);
     renderAll(); setupMainObs();
   }
 }
@@ -878,11 +966,13 @@ function slideImage(c, clipIdx){
 }
 
 function slideQuote(c, clipIdx){
+  const qs = c.quoteSize||20;
+  const qt = c.quoteTop||50;
   return `
   <div class="clip-bg" style="${bgStyle(c)}"></div>
-  <div class="quote-center">
+  <div class="quote-center" style="top:${qt}%;transform:translateY(-50%)">
     <span class="quote-mark">"</span>
-    <div class="quote-text live-quote">${esc(c.quote||c.title)}</div>
+    <div class="quote-text live-quote" style="font-size:${qs}px">${esc(c.quote||c.title)}</div>
     ${c.author?`<div class="quote-attr live-author">— ${esc(c.author)}</div>`:'<div class="quote-attr live-author" style="display:none"></div>'}
   </div>
   ${actionsHTML(c,clipIdx)}
@@ -937,24 +1027,32 @@ function slideBanner(c, clipIdx){
   </div>`;
 }
 
-// ── [NEW] FORMAT 6: 1년 전 오늘 — 필름 타임캡슐 ─────────
+// ── FORMAT 6: 1년 전 오늘 — 필름 타임캡슐 ─────────
 function slideMemory(c, clipIdx){
   const fs = c.titleSize||18;
   const dateStr = c.memoryDate || lastYearDateStr();
-  // Parse date into parts for big display
-  const parts = dateStr.split(/[\.\-\/]/);
-  const year = parts[0]||''; const mo = parts[1]||''; const day = parts[2]||'';
+  // Parse Korean or standard date formats
+  let year='', mo='', day='';
+  const korMatch = dateStr.match(/(\d+)년\s*(\d+)월\s*(\d+)일/);
+  if(korMatch){ year=korMatch[1]; mo=korMatch[2]; day=korMatch[3]; }
+  else { const p=dateStr.split(/[\.\-\/\s]/); year=p[0]||''; mo=p[1]||''; day=p[2]||''; }
   const monthNames=['','JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
   const monthLabel = monthNames[parseInt(mo,10)]||mo;
   return `
   <div class="clip-bg" style="${bgStyle(c)}"></div>
   <div class="memory-warm"></div>
   <div class="memory-grain"></div>
-  ${!c.bg?`<div class="clip-icon" style="opacity:.18;filter:sepia(1) saturate(.6)">${c.icon}</div>`:''}
-  <div class="memory-date-hero">
-    <div class="memory-label-top">1년 전 오늘</div>
-    <div class="memory-day-big">${day||'--'}</div>
-    <div class="memory-month-year">${monthLabel} ${year}</div>
+  <div class="memory-hero-wrap">
+    <div class="memory-pre-label">Throwback · 기억</div>
+    <div class="memory-ago-badge">
+      <span class="memory-ago-icon">⏰</span>
+      <span class="memory-ago-text">1년 전 오늘</span>
+    </div>
+    <div class="memory-date-display">
+      <span class="memory-date-day">${day||'--'}</span>
+      <span class="memory-date-myr">${monthLabel} · ${year}</span>
+    </div>
+    <div class="memory-divider"></div>
   </div>
   <div class="memory-rule"></div>
   ${actionsHTML(c,clipIdx)}
@@ -968,6 +1066,7 @@ function slideMemory(c, clipIdx){
     <button class="memory-btn" onclick="openNote(${clipIdx})">다시 읽기 ${ARROW_SVG}</button>
   </div>`;
 }
+
 
 // ── [NEW] FORMAT 7: 추천 댓글 — 밝은 채팅 버블 UI ────────
 function slideComment(c, clipIdx){
@@ -1145,8 +1244,11 @@ function fillDrawer(){
   setVal('memoryDateInput',c.memoryDate); setVal('commentInput',c.comment);
   setVal('commenterInput',c.commenter); setVal('commentLikesInput',c.commentLikes);
   setVal('readProgressInput',c.readProgress);
-  // 폰트 크기
+  // 폰트 크기 / 위치
   const tsEl=document.getElementById('titleSizeInput'); if(tsEl) tsEl.value=c.titleSize||18;
+  const qsEl=document.getElementById('quoteSizeInput'); if(qsEl) qsEl.value=c.quoteSize||20;
+  const qtEl=document.getElementById('quoteTopInput'); if(qtEl) qtEl.value=c.quoteTop||50;
+  const mtEl=document.getElementById('memoryTopInput'); if(mtEl) mtEl.value=c.memoryTop||130;
 }
 
 function setVal(id,v){ const e=document.getElementById(id); if(e) e.value=v||''; }
@@ -1169,11 +1271,13 @@ function updateDrawerFields(fmt){
   show('fg-titlesize',   isImage||isCard||isBanner||isMemory||isUnread);
   show('fg-insight',     isImage||isStat||isMemory||isUnread);
   show('fg-quote',       isQuote);
+  show('fg-quoteStyle',  isQuote);
   show('fg-subtitle',    isCard);
   show('fg-stat',        isStat);
   show('fg-rating',      isImage||isCard||isMemory);
   // 개인화 전용
   show('fg-memoryDate',  isMemory);
+  show('fg-memoryTop',   isMemory);
   show('fg-comment',     isComment);
   show('fg-commenter',   isComment);
   show('fg-commentLikes',isComment);
@@ -1221,6 +1325,24 @@ function liveTitleSize(val){
   saveDebounced();
 }
 
+function liveQuoteSize(val){
+  if(!clips[curClipIdx]||!isAdmin) return;
+  clips[curClipIdx].quoteSize=parseInt(val)||20;
+  document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .live-quote`).forEach(e=>e.style.fontSize=val+'px');
+  saveDebounced();
+}
+function liveQuoteTop(val){
+  if(!clips[curClipIdx]||!isAdmin) return;
+  clips[curClipIdx].quoteTop=parseInt(val)||50;
+  document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .quote-center`).forEach(e=>e.style.top=val+'%');
+  saveDebounced();
+}
+function liveMemoryTop(val){
+  if(!clips[curClipIdx]||!isAdmin) return;
+  clips[curClipIdx].memoryTop=parseInt(val)||130;
+  document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .memory-date-hero`).forEach(e=>e.style.top=val+'px');
+  saveDebounced();
+}
 function liveProgress(val){
   if(!clips[curClipIdx]||!isAdmin) return;
   const p=Math.max(1,Math.min(99,parseInt(val)||23));
@@ -1314,6 +1436,7 @@ function addClip(){
     titleSize:18, badge:'브랜드', cls:'B', author:'저자 이름', title:'새 클립의 제목',
     insight:'핵심 인사이트를 입력하세요.', quote:'', subtitle:'',
     stat:'', statUnit:'', statCtx:'',
+    quoteSize:20, quoteTop:50, memoryTop:130,
     memoryDate:'', comment:'', commenter:'', commentLikes:'', readProgress:'',
     rating:'4.0', likes:0, liked:false, saved:false, url:'https://longblack.co/note/'
   });
@@ -1336,6 +1459,3 @@ startSync();
 </script>
 </body>
 </html>
-
-
-
