@@ -467,39 +467,41 @@ select.form-input option { background:#1a1a1a; color:#fff; }
 }
 .memory-pre-label {
   font-size:9px; font-weight:800; letter-spacing:.22em;
-  color:rgba(200,155,50,.55); text-transform:uppercase; margin-bottom:16px;
+  color:rgba(255,255,255,.5); text-transform:uppercase; margin-bottom:16px;
 }
 .memory-ago-badge {
   display:flex; align-items:center; gap:9px;
-  border:2.5px solid rgba(255,195,65,.6);
+  border:2.5px solid rgba(255,255,255,.55);
   border-radius:16px; padding:11px 26px;
-  background:rgba(180,100,10,.18); backdrop-filter:blur(8px);
+  background:rgba(0,0,0,.38); backdrop-filter:blur(12px);
   margin-bottom:24px; position:relative;
 }
 .memory-ago-badge::before, .memory-ago-badge::after {
   content:''; position:absolute; left:50%; transform:translateX(-50%);
-  width:1px; background:rgba(210,155,55,.3);
+  width:1px; background:rgba(255,255,255,.2);
 }
 .memory-ago-badge::before { top:-14px; height:14px; }
 .memory-ago-badge::after  { bottom:-14px; height:14px; }
 .memory-ago-icon { font-size:22px; }
 .memory-ago-text {
   font-size:26px; font-weight:900;
-  color:rgba(255,225,120,.97); letter-spacing:-.02em;
+  color:#fff; letter-spacing:-.02em;
+  text-shadow:0 1px 8px rgba(0,0,0,.3);
 }
 .memory-date-display { text-align:center; }
 .memory-date-day {
   display:block; font-size:116px; font-weight:900;
-  color:rgba(255,235,165,.93); letter-spacing:-.06em; line-height:.95;
+  color:#fff; letter-spacing:-.06em; line-height:.95;
+  text-shadow:0 4px 32px rgba(0,0,0,.45);
 }
 .memory-date-myr {
   display:block; font-size:13px; font-weight:700;
-  letter-spacing:.2em; color:rgba(255,195,80,.55);
+  letter-spacing:.2em; color:rgba(255,255,255,.65);
   text-transform:uppercase; margin-top:8px;
 }
 .memory-divider {
   width:36px; height:2px;
-  background:linear-gradient(to right,transparent,rgba(210,155,55,.45),transparent);
+  background:linear-gradient(to right,transparent,rgba(255,255,255,.3),transparent);
   border-radius:2px; margin:18px auto 0;
 }
 
