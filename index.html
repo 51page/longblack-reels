@@ -275,7 +275,7 @@ input:checked + .toggle-slider::before { transform:translateX(18px); }
 .unread-ring-wrap { position:relative; width:128px; height:128px; }
 .unread-ring-svg { width:128px; height:128px; transform:rotate(-90deg); }
 .unread-ring-bg-c { fill:none; stroke:rgba(255,255,255,.12); stroke-width:9; }
-.unread-ring-arc { fill:none; stroke:var(--gold); stroke-width:9; stroke-linecap:round; }
+.unread-ring-arc { fill:none; stroke:var(--gold); stroke-width:9; stroke-linecap:round; transition:stroke-dashoffset 1.5s cubic-bezier(.4,0,.2,1); }
 .unread-ring-center {
   position:absolute; inset:0; display:flex; flex-direction:column;
   align-items:center; justify-content:center; text-align:center;
@@ -301,6 +301,54 @@ input:checked + .toggle-slider::before { transform:translateX(18px); }
   gap:5px; letter-spacing:-.01em; transition:opacity .15s;
 }
 .continue-btn:active { opacity:.8; }
+
+/* ── FORMAT: CAROUSEL (인스타 카드뉴스) ── */
+.clip-slide[data-format="carousel"] { background:#000; }
+.car-wrap {
+  position:absolute; inset:0; overflow:hidden;
+  touch-action:pan-y; user-select:none; cursor:grab;
+}
+.car-wrap:active { cursor:grabbing; }
+.car-track {
+  display:flex; height:100%; width:100%;
+  transition:transform .32s cubic-bezier(.25,.46,.45,.94);
+  will-change:transform;
+}
+.car-slide {
+  flex-shrink:0; width:100%; height:100%;
+  background-size:contain; background-position:center; background-repeat:no-repeat;
+  background-color:#000;
+}
+.car-footer {
+  position:absolute; bottom:0; left:0; right:0; z-index:10;
+  padding:20px 22px 38px;
+  background:linear-gradient(to top,rgba(0,0,0,.72) 0%,rgba(0,0,0,.18) 70%,transparent 100%);
+  display:flex; align-items:center; justify-content:space-between;
+  pointer-events:none;
+}
+.car-dots { display:flex; gap:6px; align-items:center; }
+.car-dot {
+  width:8px; height:8px; border-radius:50%;
+  background:rgba(255,255,255,.45); transition:all .25s;
+}
+.car-dot.active { background:#fff; width:24px; border-radius:4px; }
+.car-counter { font-size:13px; font-weight:700; color:rgba(255,255,255,.85); letter-spacing:.04em; }
+.car-swipe-hint {
+  position:absolute; bottom:90px; left:50%; transform:translateX(-50%);
+  font-size:11px; font-weight:600; color:rgba(255,255,255,.55);
+  letter-spacing:.08em; white-space:nowrap; pointer-events:none;
+  display:flex; align-items:center; gap:6px;
+}
+.car-swipe-hint span { display:inline-block; }
+.car-swipe-hint.hidden { opacity:0; transition:opacity .4s; }
+.car-empty {
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:10px; z-index:5;
+}
+.car-empty-icon { font-size:40px; opacity:.3; }
+.car-empty-txt { font-size:13px; color:rgba(255,255,255,.28); }
+/* carousel 포맷은 액션버튼 위치 조정 */
+.clip-slide[data-format="carousel"] .s-actions { bottom:auto; top:120px; }
 
 /* ── FIXED TOP BAR ── */
 .fixed-top {
@@ -574,6 +622,9 @@ select.form-input option { background:#1a1a1a; color:#fff; }
         <div class="fmt-banner" data-fmt="banner" onclick="pickFormat(this)" id="fmtBanner">
           <span style="font-size:18px">📣</span> 배너형 &nbsp;·&nbsp; 이벤트 · 광고
         </div>
+        <div class="fmt-banner" data-fmt="carousel" onclick="pickFormat(this)" id="fmtCarousel" style="margin-top:6px">
+          <span style="font-size:18px">🗂</span> 카드뉴스형 &nbsp;·&nbsp; 인스타 이미지 슬라이드
+        </div>
 
         <!-- 개인화 포맷 -->
         <div class="fmt-section-label" style="margin-top:12px">개인화</div>
@@ -758,6 +809,15 @@ select.form-input option { background:#1a1a1a; color:#fff; }
       <div class="form-group" id="fg-readProgress" style="display:none">
         <label class="form-label">읽은 비율 (%)</label>
         <input class="form-input" type="number" id="readProgressInput" min="1" max="99" placeholder="23" oninput="liveProgress(this.value)">
+      </div>
+
+      <!-- CAROUSEL IMAGES -->
+      <div id="fg-carousel" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <label class="form-label" style="margin:0">카드뉴스 이미지 URL (최대 10장)</label>
+        </div>
+        <div id="carouselInputs"></div>
+        <button class="btn-sm" onclick="addCarouselSlot()" id="carAddBtn" style="width:100%;margin-top:4px;height:34px;font-size:11px;">+ 이미지 추가</button>
       </div>
 
       <!-- RATING + URL -->
@@ -1044,7 +1104,7 @@ function slideStat(c, clipIdx){
   <div class="clip-bg" style="${bgStyle(c)}"></div>
   <div class="stat-center">
     <div class="stat-ctx live-statCtx">${esc(c.statCtx||c.badge)}</div>
-    <div class="stat-row"><span class="stat-number live-stat">${esc(c.stat)}</span><span class="stat-unit live-statUnit">${esc(c.statUnit)}</span></div>
+    <div class="stat-row"><span class="stat-number live-stat" data-target="${esc(c.stat)}">${esc(c.stat)}</span><span class="stat-unit live-statUnit">${esc(c.statUnit)}</span></div>
     ${c.insight?`<div class="stat-desc live-insight">${esc(c.insight)}</div>`:`<div class="stat-desc live-insight" style="display:none"></div>`}
   </div>
   ${actionsHTML(c,clipIdx)}
@@ -1159,10 +1219,10 @@ function slideUnread(c, clipIdx){
       <svg class="unread-ring-svg" viewBox="0 0 128 128">
         <circle class="unread-ring-bg-c" cx="64" cy="64" r="54"/>
         <circle class="unread-ring-arc live-unread-ring" cx="64" cy="64" r="54"
-          stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/>
+          stroke-dasharray="${circ}" stroke-dashoffset="${circ}" data-target="${offset}"/>
       </svg>
       <div class="unread-ring-center">
-        <div class="unread-ring-pct live-unread-pct">${prog}%</div>
+        <div class="unread-ring-pct live-unread-pct" data-target="${prog}">0%</div>
         <div class="unread-ring-lbl">읽음</div>
       </div>
     </div>
@@ -1184,6 +1244,166 @@ function slideUnread(c, clipIdx){
   </div>`;
 }
 
+// ── FORMAT: CAROUSEL (인스타 카드뉴스) ─────────────────
+function slideCarousel(c, clipIdx){
+  const imgs = (c.carouselImages||[]).filter(Boolean);
+  if(!imgs.length){
+    return `
+    <div class="car-empty">
+      <div class="car-empty-icon">🗂</div>
+      <div class="car-empty-txt">편집에서 이미지 URL을 추가하세요</div>
+    </div>
+    ${actionsHTML(c,clipIdx)}`;
+  }
+  const slides = imgs.map(url=>`<div class="car-slide" style="background-image:url('${url}')"></div>`).join('');
+  const dots = imgs.map((_,i)=>`<div class="car-dot${i===0?' active':''}"></div>`).join('');
+  const multiHint = imgs.length > 1 ? `<div class="car-swipe-hint"><span>←</span>&nbsp;스와이프&nbsp;<span>→</span></div>` : '';
+  return `
+  <div class="car-wrap" data-cur="0" data-total="${imgs.length}" data-clip-idx="${clipIdx}">
+    <div class="car-track">${slides}</div>
+    ${multiHint}
+    <div class="car-footer">
+      <div class="car-dots">${dots}</div>
+      <div class="car-counter"><span class="car-cur">1</span> / ${imgs.length}</div>
+    </div>
+  </div>
+  ${actionsHTML(c,clipIdx)}`;
+}
+
+function setupCarousel(clipIdx){
+  document.querySelectorAll(`.clip-slide[data-clip="${clipIdx}"] .car-wrap`).forEach(wrap=>{
+    if(wrap._carSetup) return; wrap._carSetup=true;
+    const track=wrap.querySelector('.car-track');
+    const dots=wrap.querySelectorAll('.car-dot');
+    const curEl=wrap.querySelector('.car-cur');
+    const hintEl=wrap.querySelector('.car-swipe-hint');
+    const total=parseInt(wrap.dataset.total)||1;
+    let cur=0, startX=0, dragging=false, dist=0;
+
+    function goTo(n, animate=true){
+      cur=Math.max(0,Math.min(total-1,n));
+      if(!animate) track.style.transition='none';
+      track.style.transform=`translateX(-${cur*100}%)`;
+      if(!animate) requestAnimationFrame(()=>{ track.style.transition=''; });
+      dots.forEach((d,i)=>d.classList.toggle('active',i===cur));
+      if(curEl) curEl.textContent=cur+1;
+      wrap.dataset.cur=cur;
+      // hide hint after first swipe
+      if(cur!==0 && hintEl) hintEl.classList.add('hidden');
+    }
+
+    // Entrance peek: briefly reveal next card edge, then snap back
+    function triggerPeek(){
+      if(total<2 || track._peeked) return;
+      track._peeked=true;
+      setTimeout(()=>{
+        track.style.transition='transform .55s cubic-bezier(.25,.46,.45,.94)';
+        track.style.transform='translateX(-20%)';
+        setTimeout(()=>{
+          track.style.transform='translateX(0)';
+          setTimeout(()=>{ track.style.transition=''; },380);
+        },650);
+      },350);
+    }
+
+    // Observe parent clip-slide to trigger peek when it scrolls into view
+    const slideEl=wrap.closest('.clip-slide');
+    if(slideEl){
+      const peekObs=new IntersectionObserver(entries=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting && e.intersectionRatio>=0.8 && cur===0){
+            triggerPeek();
+          }
+        });
+      },{threshold:0.8});
+      peekObs.observe(slideEl);
+    }
+
+    wrap.addEventListener('pointerdown',e=>{
+      startX=e.clientX; dragging=true; dist=0;
+      track.style.transition='none'; wrap.setPointerCapture(e.pointerId);
+    });
+    wrap.addEventListener('pointermove',e=>{
+      if(!dragging) return;
+      dist=e.clientX-startX;
+      track.style.transform=`translateX(calc(-${cur*100}% + ${dist}px))`;
+    });
+    wrap.addEventListener('pointerup',()=>{
+      if(!dragging) return; dragging=false;
+      track.style.transition='';
+      if(dist<-50) goTo(cur+1); else if(dist>50) goTo(cur-1); else goTo(cur);
+    });
+    wrap.addEventListener('pointercancel',()=>{ dragging=false; track.style.transition=''; goTo(cur); });
+  });
+}
+
+function setupAllCarousels(){
+  clips.forEach((_,i)=>{ if(clips[i].format==='carousel') setupCarousel(i); });
+}
+
+function setupEntryAnims(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting||e.intersectionRatio<0.75) return;
+      const slide=e.target;
+      const fmt=slide.dataset.format;
+
+      // ── Unread ring fill animation ──
+      if(fmt==='unread'&&!slide._ringDone){
+        slide._ringDone=true;
+        const ring=slide.querySelector('.live-unread-ring');
+        const pctEl=slide.querySelector('.live-unread-pct');
+        if(ring){
+          const targetOffset=parseFloat(ring.dataset.target||'0');
+          const circ=339.3;
+          const targetPct=parseInt(pctEl?.dataset.target||'0')||0;
+          // Delay slightly so the user sees the ring start from zero
+          setTimeout(()=>{
+            ring.style.strokeDashoffset=targetOffset;
+            // Count up percentage number
+            if(pctEl){
+              let start=null;
+              const dur=1500;
+              function tick(ts){
+                if(!start) start=ts;
+                const prog=Math.min((ts-start)/dur,1);
+                // ease-out
+                const eased=1-Math.pow(1-prog,3);
+                pctEl.textContent=Math.round(eased*targetPct)+'%';
+                if(prog<1) requestAnimationFrame(tick);
+              }
+              requestAnimationFrame(tick);
+            }
+          },250);
+        }
+      }
+
+      // ── Stat slot machine animation ──
+      if(fmt==='stat'&&!slide._statDone){
+        slide._statDone=true;
+        const numEl=slide.querySelector('.live-stat');
+        if(numEl){
+          const realVal=numEl.dataset.target||numEl.textContent;
+          let count=0;
+          const maxCount=14;
+          const iv=setInterval(()=>{
+            count++;
+            if(count>=maxCount){
+              clearInterval(iv);
+              numEl.textContent=realVal;
+            } else {
+              // scramble only digit characters, preserve non-digits (%, 조, 억, etc.)
+              numEl.textContent=realVal.replace(/\d/g,()=>String(Math.floor(Math.random()*10)));
+            }
+          },55);
+        }
+      }
+    });
+  },{threshold:0.75});
+
+  document.querySelectorAll('.clip-slide[data-format="unread"],.clip-slide[data-format="stat"]').forEach(el=>obs.observe(el));
+}
+
 function getSlideInner(c, clipIdx){
   switch(c.format){
     case 'quote':   return slideQuote(c,clipIdx);
@@ -1192,8 +1412,9 @@ function getSlideInner(c, clipIdx){
     case 'banner':  return slideBanner(c,clipIdx);
     case 'memory':  return slideMemory(c,clipIdx);
     case 'comment': return slideComment(c,clipIdx);
-    case 'unread':  return slideUnread(c,clipIdx);
-    default:        return slideImage(c,clipIdx);
+    case 'unread':   return slideUnread(c,clipIdx);
+    case 'carousel': return slideCarousel(c,clipIdx);
+    default:         return slideImage(c,clipIdx);
   }
 }
 
@@ -1214,6 +1435,7 @@ function appendRound(){
   });
   totalDom=start+clips.length;
   setupAppendTrigger();
+  requestAnimationFrame(()=>{ setupAllCarousels(); setupEntryAnims(); });
 }
 function rerenderClip(clipIdx){
   document.querySelectorAll(`.clip-slide[data-clip="${clipIdx}"]`).forEach(slide=>{
@@ -1222,6 +1444,7 @@ function rerenderClip(clipIdx){
     slide.innerHTML=getSlideInner(c,clipIdx);
     if(mainObs) mainObs.observe(slide);
   });
+  if(clips[clipIdx]?.format==='carousel') requestAnimationFrame(()=>setupCarousel(clipIdx));
 }
 function buildProgress(){
   const pb=document.getElementById('progressBar');
@@ -1272,6 +1495,7 @@ function fillDrawer(){
   // 포맷 버튼 활성화
   document.querySelectorAll('.fmt-opt').forEach(o=>o.classList.toggle('active',o.dataset.fmt===fmt));
   document.getElementById('fmtBanner').classList.toggle('active',fmt==='banner');
+  document.getElementById('fmtCarousel').classList.toggle('active',fmt==='carousel');
   updateDrawerFields(fmt);
   // 이미지 썸네일
   const thumb=document.getElementById('imgThumb');
@@ -1301,8 +1525,9 @@ function fillDrawer(){
 function setVal(id,v){ const e=document.getElementById(id); if(e) e.value=v||''; }
 
 function updateDrawerFields(fmt){
-  const isBanner  = fmt==='banner';
-  const isImage   = fmt==='image';
+  const isBanner   = fmt==='banner';
+  const isCarousel = fmt==='carousel';
+  const isImage    = fmt==='image';
   const isCard    = fmt==='card';
   const isQuote   = fmt==='quote';
   const isStat    = fmt==='stat';
@@ -1310,10 +1535,12 @@ function updateDrawerFields(fmt){
   const isComment = fmt==='comment';
   const isUnread  = fmt==='unread';
 
+  show('fg-carousel',    isCarousel);
+  if(isCarousel){ renderCarouselInputs(); }
   show('fg-bgimage',     isImage||isCard||isBanner||isMemory||isUnread||isComment);
   show('fg-bgcolor',     isQuote||isStat);
-  show('fg-badge',       !isBanner&&!isComment);
-  show('fg-author',      !isBanner&&!isComment);
+  show('fg-badge',       !isBanner&&!isComment&&!isCarousel);
+  show('fg-author',      !isBanner&&!isComment&&!isCarousel);
   show('fg-title',       isImage||isCard||isBanner||isMemory||isComment||isUnread);
   show('fg-titlesize',   isImage||isCard||isBanner||isMemory||isUnread);
   show('fg-insight',     isImage||isStat||isMemory||isUnread);
@@ -1346,6 +1573,7 @@ function pickFormat(target){
   clips[curClipIdx].format=fmt;
   document.querySelectorAll('.fmt-opt').forEach(o=>o.classList.toggle('active',o===target));
   document.getElementById('fmtBanner').classList.toggle('active',fmt==='banner');
+  document.getElementById('fmtCarousel').classList.toggle('active',fmt==='carousel');
   updateDrawerFields(fmt); rerenderClip(curClipIdx); saveNow();
 }
 
@@ -1373,6 +1601,39 @@ function liveTitleSize(val){
   saveDebounced();
 }
 
+function renderCarouselInputs(){
+  const c=clips[curClipIdx]; if(!c) return;
+  if(!c.carouselImages) c.carouselImages=[];
+  const imgs=c.carouselImages;
+  const container=document.getElementById('carouselInputs'); if(!container) return;
+  container.innerHTML=imgs.map((url,i)=>`
+    <div style="display:flex;gap:6px;margin-bottom:5px;align-items:center;">
+      <span style="font-size:10px;color:rgba(255,255,255,.35);min-width:16px;text-align:right;">${i+1}</span>
+      <input class="form-input" style="flex:1;font-size:11px;height:30px;" type="text" value="${url}" placeholder="이미지 URL ${i+1}"
+        oninput="updateCarouselImage(${i},this.value)">
+      <button onclick="removeCarouselSlot(${i})" style="background:rgba(255,50,50,.1);border:1px solid rgba(255,50,50,.2);color:rgba(255,80,80,.7);border-radius:6px;width:26px;height:26px;cursor:pointer;flex-shrink:0;font-size:12px;">✕</button>
+    </div>`).join('');
+  const btn=document.getElementById('carAddBtn');
+  if(btn) btn.style.display=imgs.length>=10?'none':'flex';
+}
+function addCarouselSlot(){
+  const c=clips[curClipIdx]; if(!c||!isAdmin) return;
+  if(!c.carouselImages) c.carouselImages=[];
+  if(c.carouselImages.length>=10) return;
+  c.carouselImages.push('');
+  renderCarouselInputs(); saveDebounced();
+}
+function removeCarouselSlot(i){
+  const c=clips[curClipIdx]; if(!c||!isAdmin) return;
+  c.carouselImages.splice(i,1);
+  renderCarouselInputs(); rerenderClip(curClipIdx); saveDebounced();
+}
+function updateCarouselImage(i,val){
+  const c=clips[curClipIdx]; if(!c||!isAdmin) return;
+  if(!c.carouselImages) c.carouselImages=[];
+  c.carouselImages[i]=val;
+  rerenderClip(curClipIdx); saveDebounced();
+}
 function liveQuoteSize(val){
   if(!clips[curClipIdx]||!isAdmin) return;
   clips[curClipIdx].quoteSize=parseInt(val)||20;
@@ -1442,9 +1703,15 @@ function liveProgress(val){
   clips[curClipIdx].readProgress=String(p);
   const circ=339.3; const offset=(circ*(1-p/100)).toFixed(1);
   document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .live-unread-ring`).forEach(e=>{
-    e.setAttribute('stroke-dasharray',String(circ)); e.setAttribute('stroke-dashoffset',offset);
+    e.setAttribute('stroke-dasharray',String(circ));
+    e.setAttribute('stroke-dashoffset',offset);
+    e.dataset.target=offset;
+    // also update the inline style so CSS transition fires immediately in admin edit
+    e.style.strokeDashoffset=offset;
   });
-  document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .live-unread-pct`).forEach(e=>e.textContent=p+'%');
+  document.querySelectorAll(`.clip-slide[data-clip="${curClipIdx}"] .live-unread-pct`).forEach(e=>{
+    e.textContent=p+'%'; e.dataset.target=String(p);
+  });
   saveDebounced();
 }
 
@@ -1530,6 +1797,7 @@ function addClip(){
     insight:'핵심 인사이트를 입력하세요.', quote:'', subtitle:'',
     stat:'', statUnit:'', statCtx:'',
     quoteSize:20, quoteTop:50, typingMotion:false, memoryTop:130,
+    carouselImages:[],
     memoryDate:'', comment:'', commenter:'', commentLikes:'', readProgress:'',
     rating:'4.0', likes:0, liked:false, saved:false, url:'https://longblack.co/note/'
   });
