@@ -189,11 +189,11 @@ body {
   height:1px; background:linear-gradient(to right,transparent,rgba(210,155,55,.32) 22%,rgba(210,155,55,.32) 78%,transparent);
 }
 .s-bottom-memory { position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 20px 36px 20px; }
-.memory-title { font-size:18px; font-weight:700; color:rgba(255,230,185,.96); line-height:1.42; letter-spacing:-.025em; margin-bottom:10px; }
+.memory-title { font-size:18px; font-weight:700; color:#fff; line-height:1.42; letter-spacing:-.025em; margin-bottom:10px; text-shadow:0 2px 12px rgba(0,0,0,.4); }
 .memory-btn {
-  width:100%; height:44px; background:rgba(170,100,10,.22); border-radius:11px;
-  border:1px solid rgba(215,160,55,.38); cursor:pointer; font-size:13.5px; font-weight:700;
-  color:rgba(255,210,120,.92); font-family:inherit; display:flex; align-items:center; justify-content:center;
+  width:100%; height:44px; background:#fff; border-radius:11px;
+  border:none; cursor:pointer; font-size:13.5px; font-weight:700;
+  color:#0A0A0A; font-family:inherit; display:flex; align-items:center; justify-content:center;
   gap:5px; letter-spacing:-.01em; transition:opacity .15s;
 }
 .memory-btn:active { opacity:.8; }
@@ -367,6 +367,7 @@ select.form-input option { background:#1a1a1a; color:#fff; }
 .s-bottom-memory .clip-insight,
 .s-bottom-unread .unread-title,
 .s-bottom-stat .stat-desc { margin-right:60px; }
+.s-bottom-memory .clip-insight { background:rgba(0,0,0,.28); border-left-color:rgba(255,255,255,.4); }
 
 /* ── 클립 액자 프레임 ── */
 .clip-frame-el {
@@ -1081,10 +1082,10 @@ function slideMemory(c, clipIdx){
   <div class="s-bottom-memory">
     <div class="clip-meta">
       <span class="badge s-badge badge-${c.cls}">${esc(c.badge)}</span>
-      ${c.author?`<span class="clip-author live-author" style="color:rgba(255,210,130,.5)">${esc(c.author)}</span>`:'<span class="clip-author live-author" style="display:none"></span>'}
+      ${c.author?`<span class="clip-author live-author" style="color:rgba(255,255,255,.6)">${esc(c.author)}</span>`:'<span class="clip-author live-author" style="display:none"></span>'}
     </div>
     <div class="memory-title live-title" style="font-size:${fs}px">${esc(c.title)}</div>
-    ${c.insight?`<div class="clip-insight"><div class="insight-label" style="color:rgba(200,145,55,.8)">기억나시나요?</div><div class="insight-text live-insight" style="color:rgba(255,210,140,.68)">${esc(c.insight)}</div></div>`:`<div class="clip-insight" style="display:none"><div class="insight-label">기억나시나요?</div><div class="insight-text live-insight"></div></div>`}
+    ${c.insight?`<div class="clip-insight"><div class="insight-label" style="color:rgba(255,255,255,.75)">기억나시나요?</div><div class="insight-text live-insight" style="color:rgba(255,255,255,.82)">${esc(c.insight)}</div></div>`:`<div class="clip-insight" style="display:none"><div class="insight-label">기억나시나요?</div><div class="insight-text live-insight"></div></div>`}
     <button class="memory-btn" onclick="openNote(${clipIdx})">다시 읽기 ${ARROW_SVG}</button>
   </div>`;
 }
