@@ -369,15 +369,6 @@ select.form-input option { background:#1a1a1a; color:#fff; }
 .s-bottom-stat .stat-desc { margin-right:60px; }
 .s-bottom-memory .clip-insight { background:rgba(0,0,0,.28); border-left-color:rgba(255,255,255,.4); }
 
-/* ── 클립 액자 프레임 ── */
-.clip-frame-el {
-  position:absolute; inset:0; z-index:200; pointer-events:none;
-  border:5px solid var(--fc, transparent);
-  border-radius:54px;
-}
-@media (max-width:768px) {
-  .clip-frame-el { border-radius:0; }
-}
 .fmt-section-label { font-size:9px; font-weight:700; color:rgba(255,255,255,.22); letter-spacing:.12em; text-transform:uppercase; margin:10px 0 6px; }
 .fmt-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px; }
 .fmt-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-bottom:6px; }
@@ -1164,22 +1155,17 @@ function slideUnread(c, clipIdx){
   </div>`;
 }
 
-const FRAME_COLORS = ['#FF4B22','#D6B38E','#9FE99E','#555FFF'];
-
-function getSlideInner(c, clipIdx, frameColor){
-  let inner = '';
+function getSlideInner(c, clipIdx){
   switch(c.format){
-    case 'quote':   inner=slideQuote(c,clipIdx); break;
-    case 'card':    inner=slideCard(c,clipIdx); break;
-    case 'stat':    inner=slideStat(c,clipIdx); break;
-    case 'banner':  inner=slideBanner(c,clipIdx); break;
-    case 'memory':  inner=slideMemory(c,clipIdx); break;
-    case 'comment': inner=slideComment(c,clipIdx); break;
-    case 'unread':  inner=slideUnread(c,clipIdx); break;
-    default:        inner=slideImage(c,clipIdx);
+    case 'quote':   return slideQuote(c,clipIdx);
+    case 'card':    return slideCard(c,clipIdx);
+    case 'stat':    return slideStat(c,clipIdx);
+    case 'banner':  return slideBanner(c,clipIdx);
+    case 'memory':  return slideMemory(c,clipIdx);
+    case 'comment': return slideComment(c,clipIdx);
+    case 'unread':  return slideUnread(c,clipIdx);
+    default:        return slideImage(c,clipIdx);
   }
-  const fc = frameColor || FRAME_COLORS[Math.floor(Math.random()*FRAME_COLORS.length)];
-  return inner + `<div class="clip-frame-el" style="--fc:${fc}"></div>`;
 }
 
 function renderAll(){
@@ -1193,9 +1179,7 @@ function appendRound(){
     const div=document.createElement('div');
     div.className='clip-slide'; div.dataset.i=start+clipIdx;
     div.dataset.clip=clipIdx; div.dataset.format=c.format;
-    const fc=FRAME_COLORS[Math.floor(Math.random()*FRAME_COLORS.length)];
-    div.dataset.fc=fc;
-    div.innerHTML=getSlideInner(c,clipIdx,fc);
+    div.innerHTML=getSlideInner(c,clipIdx);
     wrap.appendChild(div);
     if(mainObs) mainObs.observe(div);
   });
@@ -1206,8 +1190,7 @@ function rerenderClip(clipIdx){
   document.querySelectorAll(`.clip-slide[data-clip="${clipIdx}"]`).forEach(slide=>{
     const c=clips[clipIdx];
     slide.dataset.format=c.format;
-    const fc=slide.dataset.fc||FRAME_COLORS[Math.floor(Math.random()*FRAME_COLORS.length)];
-    slide.innerHTML=getSlideInner(c,clipIdx,fc);
+    slide.innerHTML=getSlideInner(c,clipIdx);
     if(mainObs) mainObs.observe(slide);
   });
 }
