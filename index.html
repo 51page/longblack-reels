@@ -1892,6 +1892,15 @@ if(isAdmin) document.getElementById('editBtn').style.display='flex';
       active=false;
     }
   },{passive:true});
+
+  // 뒤로가기로 돌아왔을 때 상태 리셋 (bfcache 복원 포함)
+  window.addEventListener('pageshow',()=>{
+    committed=false; active=false; dir=0;
+    phone.style.transition='none';
+    phone.style.transform='';
+    panel.style.transition='none';
+    panel.style.transform='translateX(100%)';
+  });
 })();
 
 startSync();
