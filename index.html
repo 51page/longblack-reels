@@ -19,7 +19,7 @@ body {
 }
 .dynamic-island {
   position:absolute; top:12px; left:50%; transform:translateX(-50%);
-  width:12px; height:12px; border-radius:50%; z-index:300;
+  width:126px; height:36px; background:#000; border-radius:20px; z-index:300;
 }
 .scroll-wrap {
   position:absolute; inset:0; overflow-y:scroll;
@@ -1816,7 +1816,34 @@ function deleteClip(){
 }
 
 if(isAdmin) document.getElementById('editBtn').style.display='flex';
+
+// ── 수평 스와이프 → 페이지 이동 ──
+(function(){
+  let sx=0, sy=0, touchTarget=null;
+  document.addEventListener('touchstart',e=>{
+    sx=e.touches[0].clientX;
+    sy=e.touches[0].clientY;
+    touchTarget=e.target;
+  },{ passive:true });
+  document.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-sx;
+    const dy=e.changedTouches[0].clientY-sy;
+    // 캐러셀 안에선 무시 (캐러셀이 직접 처리)
+    if(touchTarget&&touchTarget.closest('.car-wrap')) return;
+    // 수평 이동이 80px 이상이고, 수직보다 1.5배 이상 커야 함
+    if(Math.abs(dx)<80||Math.abs(dx)<Math.abs(dy)*1.5) return;
+    if(dx>0){
+      // 좌→우: 메인 사이트
+      window.open('https://www.longblack.co','_blank');
+    } else {
+      // 우→좌: 노트 페이지
+      window.open('https://www.longblack.co/note/2073','_blank');
+    }
+  },{ passive:true });
+})();
+
 startSync();
 </script>
 </body>
 </html>
+
