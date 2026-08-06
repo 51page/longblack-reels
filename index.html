@@ -1817,29 +1817,81 @@ function deleteClip(){
 
 if(isAdmin) document.getElementById('editBtn').style.display='flex';
 
-// ── 수평 스와이프 → 페이지 이동 ──
+// ── 수평 스와이프 → 슬라이드 페이지 전환 ──
 (function(){
-  let sx=0, sy=0, touchTarget=null;
+  const phone=document.querySelector('.phone');
+
+  // 다음 페이지 프리뷰 패널 생성
+  const panel=document.createElement('div');
+  Object.assign(panel.style,{
+    position:'fixed',inset:'0',zIndex:'9999',
+    background:'#0A0A0A',
+    display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
+    gap:'4px',pointerEvents:'none',willChange:'transform',
+    transform:'translateX(100%)'
+  });
+  panel.innerHTML=`
+    <div style="font-size:17px;font-weight:900;color:#fff;letter-spacing:-.03em">LONGBLACK</div>
+    <div id="swipeUrl" style="font-size:10px;color:rgba(255,255,255,.38);letter-spacing:.06em;margin-top:4px;text-transform:lowercase"></div>
+  `;
+  document.body.appendChild(panel);
+
+  let sx=0,sy=0,touchTarget=null,active=false,committed=false,dir=0;
+
   document.addEventListener('touchstart',e=>{
-    sx=e.touches[0].clientX;
-    sy=e.touches[0].clientY;
-    touchTarget=e.target;
-  },{ passive:true });
-  document.addEventListener('touchend',e=>{
-    const dx=e.changedTouches[0].clientX-sx;
-    const dy=e.changedTouches[0].clientY-sy;
-    // 캐러셀 안에선 무시 (캐러셀이 직접 처리)
+    if(committed) return;
+    sx=e.touches[0].clientX; sy=e.touches[0].clientY;
+    touchTarget=e.target; active=false; dir=0;
+  },{passive:true});
+
+  document.addEventListener('touchmove',e=>{
+    if(committed) return;
     if(touchTarget&&touchTarget.closest('.car-wrap')) return;
-    // 수평 이동이 80px 이상이고, 수직보다 1.5배 이상 커야 함
-    if(Math.abs(dx)<80||Math.abs(dx)<Math.abs(dy)*1.5) return;
-    if(dx>0){
-      // 좌→우: 메인 사이트
-      window.open('https://www.longblack.co','_blank');
-    } else {
-      // 우→좌: 노트 페이지
-      window.open('https://www.longblack.co/note/2073','_blank');
+    const dx=e.touches[0].clientX-sx, dy=e.touches[0].clientY-sy;
+    if(!active){
+      if(Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)*1.4){
+        active=true; dir=dx>0?1:-1;
+        // 패널을 들어올 방향에서 대기
+        panel.style.transition='none';
+        panel.style.transform=`translateX(${dir>0?'-100%':'100%'})`;
+        document.getElementById('swipeUrl').textContent=
+          dir>0?'longblack.co':'longblack.co/note/2073';
+      } else if(Math.abs(dy)>12){ return; }
+      else { return; }
     }
-  },{ passive:true });
+    if(!active) return;
+    const W=window.innerWidth;
+    // 폰이 손가락을 따라 이동
+    phone.style.transition='none';
+    phone.style.transform=`translateX(${dx}px)`;
+    // 패널이 반대편에서 따라옴
+    panel.style.transition='none';
+    panel.style.transform=`translateX(${dx>0?(dx-W):(dx+W)}px)`;
+  },{passive:true});
+
+  document.addEventListener('touchend',e=>{
+    if(!active||committed) return;
+    const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+    const W=window.innerWidth;
+    const ease='cubic-bezier(.4,0,.2,1)';
+    if(Math.abs(dx)>W*0.38&&Math.abs(dx)>Math.abs(dy)*1.5){
+      // 커밋: 슬라이드 완료 후 이동
+      committed=true;
+      phone.style.transition=`transform .3s ${ease}`;
+      phone.style.transform=`translateX(${dx>0?W:-W}px)`;
+      panel.style.transition=`transform .3s ${ease}`;
+      panel.style.transform='translateX(0)';
+      const url=dx>0?'https://www.longblack.co':'https://www.longblack.co/note/2073';
+      setTimeout(()=>{ window.location.href=url; },300);
+    } else {
+      // 스냅백
+      phone.style.transition='transform .28s cubic-bezier(.25,.46,.45,.94)';
+      phone.style.transform='translateX(0)';
+      panel.style.transition='transform .28s cubic-bezier(.25,.46,.45,.94)';
+      panel.style.transform=`translateX(${dir>0?'-100%':'100%'})`;
+      active=false;
+    }
+  },{passive:true});
 })();
 
 startSync();
